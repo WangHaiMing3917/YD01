@@ -1,0 +1,83 @@
+;#<FEEDBACK># ARM Linker, 5060750: Last Updated: Mon Jan 13 10:11:19 2025
+;VERSION 0.2
+;FILE boot.o
+__asm___6_boot_c_a2843444____REV16 <= USED 0
+__asm___6_boot_c_a2843444____REVSH <= USED 0
+;FILE bsp.o
+__asm___5_bsp_c_efbfcc98____REV16 <= USED 0
+__asm___5_bsp_c_efbfcc98____REVSH <= USED 0
+;FILE bsp_flash.o
+Bsp_Flash_Read_Bytes <= USED 0
+__asm___11_bsp_flash_c_4459743c____REV16 <= USED 0
+__asm___11_bsp_flash_c_4459743c____REVSH <= USED 0
+;FILE bsp_iwdg.o
+Bsp_IWDG_Init <= USED 0
+Bsp_IWDG_ReFresh <= USED 0
+__asm___10_bsp_iwdg_c_45c65621____REV16 <= USED 0
+__asm___10_bsp_iwdg_c_45c65621____REVSH <= USED 0
+;FILE ciu32l051_std.o
+__asm___15_ciu32l051_std_c_e8c92ae1____REV16 <= USED 0
+__asm___15_ciu32l051_std_c_e8c92ae1____REVSH <= USED 0
+std_delay_end <= USED 0
+std_delayms_start <= USED 0
+std_delayus_start <= USED 0
+;FILE ciu32l051_std_flash.o
+__asm___21_ciu32l051_std_flash_c_83135aa6____REV16 <= USED 0
+__asm___21_ciu32l051_std_flash_c_83135aa6____REVSH <= USED 0
+std_flash_mass_erase <= USED 0
+std_flash_opt_erase <= USED 0
+;FILE ciu32l051_std_gpio.o
+__asm___20_ciu32l051_std_gpio_c_a9b97e0a____REV16 <= USED 0
+__asm___20_ciu32l051_std_gpio_c_a9b97e0a____REVSH <= USED 0
+std_gpio_deinit <= USED 0
+std_gpio_init <= USED 0
+std_gpio_struct_init <= USED 0
+;FILE ciu32l051_std_lptim.o
+__asm___21_ciu32l051_std_lptim_c_19bf495f____REV16 <= USED 0
+__asm___21_ciu32l051_std_lptim_c_19bf495f____REVSH <= USED 0
+std_lptim_deinit <= USED 0
+std_lptim_init <= USED 0
+std_lptim_struct_init <= USED 0
+;FILE ciu32l051_std_pmu.o
+__asm___19_ciu32l051_std_pmu_c_e40033bc____REV16 <= USED 0
+__asm___19_ciu32l051_std_pmu_c_e40033bc____REVSH <= USED 0
+std_pmu_enter_sleep <= USED 0
+std_pmu_enter_stop <= USED 0
+std_pmu_pvd_init <= USED 0
+std_pmu_reg_reset <= USED 0
+std_pmu_struct_init <= USED 0
+;FILE ciu32l051_std_rcc.o
+__asm___19_ciu32l051_std_rcc_c_127939af____REV16 <= USED 0
+__asm___19_ciu32l051_std_rcc_c_127939af____REVSH <= USED 0
+std_rcc_get_hclkfreq <= USED 0
+std_rcc_get_pclk1freq <= USED 0
+std_rcc_get_pclk2freq <= USED 0
+std_rcc_get_pllfreq <= USED 0
+std_rcc_get_sysclkfreq <= USED 0
+;FILE ciu32l051_std_rtc.o
+__asm___19_ciu32l051_std_rtc_c____REV16 <= USED 0
+__asm___19_ciu32l051_std_rtc_c____REVSH <= USED 0
+;FILE ciu32l051_std_tim.o
+__asm___19_ciu32l051_std_tim_c_cc30771d____REV16 <= USED 0
+__asm___19_ciu32l051_std_tim_c_cc30771d____REVSH <= USED 0
+std_tim_deinit <= USED 0
+std_tim_init <= USED 0
+std_tim_input_capture_init <= USED 0
+std_tim_input_capture_struct_init <= USED 0
+std_tim_output_compare_init <= USED 0
+std_tim_output_compare_struct_init <= USED 0
+std_tim_struct_init <= USED 0
+;FILE crc32.o
+__asm___7_crc32_c_d5622ee4____REV16 <= USED 0
+__asm___7_crc32_c_d5622ee4____REVSH <= USED 0
+;FILE startup_ciu32l051.o
+;FILE system.o
+__asm___8_system_c_68b72541____REV16 <= USED 0
+__asm___8_system_c_68b72541____REVSH <= USED 0
+;FILE system_ciu32l051.o
+__asm___18_system_ciu32l051_c_5d646a67____REV16 <= USED 0
+__asm___18_system_ciu32l051_c_5d646a67____REVSH <= USED 0
+;FILE system_info.o
+SystemInfo_Save_Request <= USED 0
+__asm___13_system_info_c_ed6e57dd____REV16 <= USED 0
+__asm___13_system_info_c_ed6e57dd____REVSH <= USED 0

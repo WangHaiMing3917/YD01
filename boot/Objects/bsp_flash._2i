@@ -1,0 +1,6 @@
+--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Inc\System -I .\CMSIS\Device -I .\drivers\inc -I .\CMSIS\Core -I .\CMSIS\Device -I .\Inc\Bsp -I ..\product -I .\Inc\Upgrade
+-I.\RTE\_boot
+-ID:\Users\admin\AppData\Local\Arm\Packs\HED\CIU32L0xx_DFP\1.2.6\Drivers\CMSIS\Device\CIU32L051\Include
+-ID:\Keil_v5\ARM\CMSIS\Include
+-D__UVISION_VERSION="529" -DCIU32L051 -DCIU32L051
+-o .\objects\bsp_flash.o --omf_browse .\objects\bsp_flash.crf --depend .\objects\bsp_flash.d --feedback ".\Objects\bootloader.fed" "Src\Bsp\bsp_flash.c"
