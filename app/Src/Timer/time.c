@@ -1,6 +1,26 @@
 #include "system.h"
 
-CURRENT_TIME_STRUCT Current __attribute__ ((aligned (4u)));;
+CURRENT_TIME_STRUCT Current __attribute__ ((aligned (4u)));
+
+const uint8_t WeekModeTable[15] = {
+    
+    MonDay|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday,  // 0
+    MonDay,    //1
+    Tuesday,   //2
+    Wednesday, //3
+    Thursday,  //4
+    Friday,    //5
+    Saturday,  //6
+    Sunday,    //7
+    MonDay|Tuesday|Wednesday|Thursday|Friday,  //8
+    Sunday|Saturday,                            //9
+    MonDay|Tuesday|Wednesday|Thursday|Friday|Saturday, //10
+    MonDay|Wednesday|Friday,                   //11
+    Tuesday|Thursday|Saturday,                //12
+    MonDay|Tuesday|Wednesday,                  //13
+    Thursday|Friday|Saturday                   //14
+};
+
 volatile uint32_t uwTick;
 //****************************************************************//
 //函数名称: void TIM8_IRQHandler(void)
@@ -58,232 +78,219 @@ void Current_Clock_Init(void){
 //***************************************************************//
 void Check_Near_CurrentTime_Arrary(TIMING_INFO *Ch){
 
-     uint8_t enable_count=0;
-     uint8_t save_count[56];
-     uint8_t save_number=0;
-     memset(save_count,0,56);
-     //将56组数据有效的定时，且小于当前时间的
-     for(uint8_t i=0;i<56;i++){
-       //是否使能
-       if(Ch->timing[i].enable){
-         //有定时使能
-         enable_count++;
-         //星期有效   
-         if((Timing_Week_Mode_Selcet(Ch->timing[i].week)&Current.Week)>0){
-            //定时时间小于当前时间   或 定时小时相同，分钟小于或者等于
-            if(Ch->timing[i].hour<Current.Hours||((Ch->timing[i].hour==Current.Hours)&&(Ch->timing[i].minutes<=Current.Minute))){
-                //存储当前的定时序号
-                save_count[save_number]=i+1;
-                save_number++; 
-            }
-         }
-       }
-     }
-     //小于当前时间的定时数组大于0
-     if(save_number>0||enable_count){
-        uint8_t cache=0;
-        for(uint8_t j=save_number;j>0;j--){
-        
-            for(uint8_t p=1;p<j;p++){
-                
-              //因为初始的数值+1，所以要-1  将时间数据从小到大排列
-              if((Ch->timing[save_count[p-1]-1].hour> Ch->timing[save_count[p]-1].hour)
-                ||((Ch->timing[save_count[p-1]-1].hour==Ch->timing[save_count[p]-1].hour)&&(Ch->timing[save_count[p-1]-1].minutes>Ch->timing[save_count[p]-1].minutes))){
-                    
-                     cache= save_count[p];
-                     save_count[p]= save_count[p-1];
-                     save_count[p-1]=cache;
-              }
-            }
-        }
-        uint8_t error=0;
-        
-        if(save_number==1){
-        //只有一个有效是定时数组  
-           __nop();
-            
-        }else{
+   uint8_t enable_count = 0;
+   uint8_t save_count[56] = {0};
+   uint8_t save_number = 0;
 
-          while(save_number){
-             error=0; 
-             for(uint8_t i=0;i<save_number;i++){
-        
-               if(Ch->timing[save_count[save_number-1]-1].hour== Ch->timing[save_count[i]-1].hour&&Ch->timing[save_count[save_number-1]-1].minutes== Ch->timing[save_count[i]-1].minutes){
-                 //判断是否模式不同
-                 if((save_count[save_number-1]%2)!=(save_count[i]%2)){
-                  save_count[i]=0;  
-                  save_count[save_number-1]=0;
-                  error=1;
-                 }
-               }
-             }
-             if(save_number==2)
-                 break;
-             if(error){
-               uint8_t cache[56];
-               uint8_t cnt=0;
-               memset(cache,0,56);               
-               for(uint8_t i=0;i<save_number-1;i++){
-                   
-                 if(save_count[i]>0){
-                     cache[cnt]=save_count[i];
-                     cnt++;
-                 }
-               }
-               for(uint8_t j=0;j<cnt;j++)
-                 save_count[j]=cache[j];
-               save_number=cnt;
-               if(save_number==1){
-                error=0;
-                break;
-               }
-             }
-    
-             if(error==0)
-               break;
-          }
-        }
-        if(save_number||enable_count){
-           //定时组不为空 
-           if (Ch->Mode!=AUTO_STATE){
-               System_Properties_Change_Cal(Ch->Index,Mode_Change);
-               Ch->Mode=AUTO_STATE;
-           }
-           //当前显示通道和下发的通道一致
-           if((Ch->Index+1)==Current.channel) {
-             Current.Mode=Ch->Mode;
-             Lcd_Channel_State_Change_Fast_Flash(6);    
-           }
-           Ch->Timing_is_Valid=1u;
-
-        } else{
-            
-           Ch->Timing_is_Valid=0u;
-           if(Current.Mode==AUTO_STATE){
-             Channel_Control(Ch->Index,RELAY_OFF,change_flag); 
-             Ch->Mode=CLOSE_STATE;
-             if((Ch->Index+1)==Current.channel)   
-               Current.Mode=Ch->Mode;
-             System_Properties_Change_Cal(Ch->Index,Mode_Change);
-           }
-        } 
-         //定时值有效    
-        if(!error&&save_number){
+   // 筛选有效定时
+   for(uint8_t i = 0; i < 56; i++){
+       
+      TIMING_BASE_STRUCT* t = &Ch->timing[i];
+      if(t->enable){
           
-           if(save_count[ save_number-1]%2==0)
-            Channel_Control(Ch->Index,RELAY_OFF,change_flag);
-           else
-            Channel_Control(Ch->Index,RELAY_ON,change_flag);
-        }else if(!error&&enable_count)
-          Channel_Control(Ch->Index,RELAY_OFF,change_flag);
-     }
-   //   Lcd_Channel_State_Change_Fast_Flash(6);   
-       uint8_t Group_Enable_Cache=0;
-      
-        for(uint8_t c=0;c<28;c++){
-      
-         if( Ch->timing[2*c].enable==1|| Ch->timing[2*c+1].enable==1)
-           Group_Enable_Cache++; 
-         if((Ch->timing[2*c].enable==1)&&(Ch->timing[2*c+1].enable==0)){
-           Ch->timing[2*c].disp_none=0;
-           Ch->timing[2*c+1].disp_none=1;  
-         }else if((Ch->timing[2*c].enable==0)&&(Ch->timing[2*c+1].enable==1)){
-           Ch->timing[2*c].disp_none=1;
-           Ch->timing[2*c+1].disp_none=0;  
-         }
-        }
-        if(SystemInfo.time_enable_count[Ch->Index]!=Group_Enable_Cache){
-           SystemInfo.time_enable_count[Ch->Index]=Group_Enable_Cache;
-           System.timer_Enable_Count[Ch->Index]= SystemInfo.time_enable_count[Ch->Index];
-           System_Properties_Change_Cal(Ch->Index,Group_Change);    
-        }
-        if(SystemInfo.crc16!=Crc16_Cal((uint8_t *)&SystemInfo.time_channel,845u))
-           System_Properties_Change_Cal(Ch->Index,Group_Time_Change);    
-        
-        Display.update_lcd=1;
-     if(Group_Enable_Cache==0){
-     
-        if(Current.Mode==AUTO_STATE){
+        enable_count++;
+          
+        if((WeekModeTable[t->week] & Current.Week) != 0){
             
-           if(SystemInfo.time_channel[Ch->Index].Relays_States)  {
- 
-              Channel_Control(Ch->Index,RELAY_OFF,change_flag);
-           }
-           Ch->Mode=CLOSE_STATE;
-           Ch->Timing_is_Valid=0;
-           System_Properties_Change_Cal(Ch->Index,Mode_Change);
-           if((Ch->Index+1)==Current.channel)              
-           Current.Mode=Ch->Mode;
-        } 
-     }
-     
-     
-}
-//****************************************************************//
-//函数名称: void Timing_Week_Mode_Selcet(void)
-//函数功能: 定时星期模式
-//参    数:
-//返 回 值:
-//说    明: 
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-uint8_t Timing_Week_Mode_Selcet(uint8_t Num){
+            if( (t->hour < Current.Hours) || 
+                (t->hour == Current.Hours && t->minutes <= Current.Minute) ){
+                    
+                save_count[save_number++] = i + 1;
+            }
+        }
+      }
+   }
 
-    uint8_t mode=0;
-    switch(Num){
-
-       case 0:
-           mode=MonDay|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday;
-        break;
-       case 1:
-           mode=MonDay;
-        break;
-       case 2:
-           mode=Tuesday;
-        break;
-       case 3:
-           mode=Wednesday;
-        break;
-       case 4:
-           mode=Thursday;
-        break;
-       case 5:
-           mode=Friday;
-        break;   
-       case 6:
-           mode=Saturday;
-        break;
-       case 7:
-           mode=Sunday;
-        break;
-       case 8:
-           mode=MonDay|Tuesday|Wednesday|Thursday|Friday;
-        break;
-       case 9:
-           mode=Sunday|Saturday;
-        break; 
-       case 10:
-           mode=MonDay|Tuesday|Wednesday|Thursday|Friday|Saturday;
-        break; 
-       case 11:
-           mode=MonDay|Wednesday|Friday;
-        break;
-       case 12:
-           mode=Tuesday|Thursday|Saturday;
-        break; 
-       case 13:
-           mode=MonDay|Tuesday|Wednesday;
-        break; 
-       case 14:
-           mode=Thursday|Friday|Saturday;
-        break;
-       default:
-
-        break;
-
+   // 排序 + 去重处理
+   if(save_number > 0 || enable_count){
+    // 冒泡排序（从早到晚）
+    if(save_number > 1){
+        uint8_t cache;
+        for(uint8_t j = save_number; j > 0; j--){
+            
+            for(uint8_t p = 1; p < j; p++){
+                
+                TIMING_BASE_STRUCT* t_prev = &Ch->timing[save_count[p-1]-1];
+                
+                TIMING_BASE_STRUCT* t_curr = &Ch->timing[save_count[p]-1];
+                
+                if( (t_prev->hour > t_curr->hour) || 
+                    (t_prev->hour == t_curr->hour && t_prev->minutes > t_curr->minutes) ){
+                    cache = save_count[p];
+                    save_count[p] = save_count[p-1];
+                    save_count[p-1] = cache;
+                }
+            }
+        }
     }
-  return mode;
+
+    uint8_t error = 0;
+    // 去重逻辑
+    if(save_number >= 2){
+        
+        while(save_number){
+            
+            error = 0;
+            
+            uint8_t last_idx = save_count[save_number-1] - 1;
+            
+            TIMING_BASE_STRUCT* t_last = &Ch->timing[last_idx];
+            
+            for(uint8_t i = 0; i < save_number; i++){
+                
+                uint8_t curr_idx = save_count[i] - 1;
+                
+                TIMING_BASE_STRUCT* t_curr = &Ch->timing[curr_idx];
+                
+                if(t_last->hour == t_curr->hour && t_last->minutes == t_curr->minutes){
+                    
+                    if( (save_count[save_number-1] % 2) != (save_count[i] % 2) ){
+                        
+                        save_count[i] = 0;
+                        
+                        save_count[save_number-1] = 0;
+                        
+                        error = 1;
+                    }
+                }
+            }
+
+            if(error){
+                
+                uint8_t cache[56] = {0};
+                
+                uint8_t cnt = 0;
+                
+                for(uint8_t i = 0; i < save_number-1; i++){
+                    
+                    if(save_count[i] > 0){
+                        
+                        cache[cnt++] = save_count[i];
+                    }
+                }
+                
+                memcpy(save_count, cache, cnt);
+                
+                save_number = cnt;
+                
+                if(save_number <= 1) break;
+                
+            }else{
+                break;
+            }
+        }
+    }
+
+    // 自动模式控制
+    if(save_number || enable_count){
+        
+        if(Ch->Mode != AUTO_STATE){
+            
+            System_Properties_Change_Cal(Ch->Index, Mode_Change);
+            
+            Ch->Mode = AUTO_STATE;
+        }
+        if((Ch->Index + 1) == Current.channel){
+            
+            Current.Mode = Ch->Mode;
+            
+            Lcd_Channel_State_Change_Fast_Flash(6);
+        }
+        Ch->Timing_is_Valid = 1;
+    }else{
+        
+        Ch->Timing_is_Valid = 0;
+        
+        if(Current.Mode == AUTO_STATE){
+            
+            Channel_Control(Ch->Index, RELAY_OFF, change_flag);
+            
+            Ch->Mode = CLOSE_STATE;
+            
+            System_Properties_Change_Cal(Ch->Index, Mode_Change);
+            
+            if((Ch->Index + 1) == Current.channel){
+                Current.Mode = Ch->Mode;
+            }
+        }
+    }
+
+    // 执行最终开关
+    if(!error && save_number){
+        uint8_t last = save_count[save_number-1];
+        Channel_Control(Ch->Index, (last % 2 == 0) ? RELAY_OFF : RELAY_ON, change_flag);
+    }else if(!error && enable_count)
+        Channel_Control(Ch->Index, RELAY_OFF, change_flag);
+   
+   }
+
+   // 使能组计数 + disp_none 处理
+   uint8_t Group_Enable_Cache = 0;
+   
+   for(uint8_t c = 0; c < 28; c++){
+       
+    TIMING_BASE_STRUCT* t0 = &Ch->timing[2*c];
+       
+    TIMING_BASE_STRUCT* t1 = &Ch->timing[2*c+1];
+    
+    if(t0->enable || t1->enable) Group_Enable_Cache++;
+    
+    if(t0->enable == 1 && t1->enable == 0){
+        
+        t0->disp_none = 0;
+        
+        t1->disp_none = 1;
+        
+    }else if(t0->enable == 0 && t1->enable == 1){
+        
+        t0->disp_none = 1;
+        
+        t1->disp_none = 0;
+        
+    }
+   }
+
+   // 组数量变化上报
+   if(SystemInfo.time_enable_count[Ch->Index] != Group_Enable_Cache){
+       
+    SystemInfo.time_enable_count[Ch->Index] = Group_Enable_Cache;
+       
+    System.timer_Enable_Count[Ch->Index] = Group_Enable_Cache;
+       
+    System_Properties_Change_Cal(Ch->Index, Group_Change);
+       
+   }
+
+   // CRC校验 定时内容变化
+   if(SystemInfo.crc16 != Crc16_Cal((uint8_t*)&SystemInfo.time_channel, 845u)){
+       
+    System_Properties_Change_Cal(Ch->Index, Group_Time_Change);
+       
+   }
+
+   Display.update_lcd = 1;
+
+   // 无定时强制关闭
+   if(Group_Enable_Cache == 0){
+       
+    if(Current.Mode == AUTO_STATE){
+        
+        if(SystemInfo.time_channel[Ch->Index].Relays_States)
+           Channel_Control(Ch->Index, RELAY_OFF, change_flag);
+        
+        Ch->Mode = CLOSE_STATE;
+        
+        Ch->Timing_is_Valid = 0;
+        
+        System_Properties_Change_Cal(Ch->Index, Mode_Change);
+        
+        if((Ch->Index + 1) == Current.channel)
+           Current.Mode = Ch->Mode;
+        
+    }
+   }
 }
+
 //****************************************************************//
 //函数名称: uint8_t Timing_Week_Mode_To_Number(uint8_t Mode)
 //函数功能: 星期转换成睡
@@ -294,60 +301,16 @@ uint8_t Timing_Week_Mode_Selcet(uint8_t Num){
 //***************************************************************//
 uint8_t Timing_Week_Mode_To_Number(uint8_t Mode){
 
-    uint8_t Number=0;
-    switch(Mode){
     
-       case (MonDay|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):
-          Number=0u; 
-        break;
-       case  MonDay:
-          Number=1u;   
-        break;
-       case  Tuesday:
-          Number=2u;    
-        break;    
-       case  Wednesday:
-          Number=3u;   
-        break;   
-       case  Thursday:
-          Number=4u;   
-        break;
-       case  Friday:
-          Number=5u;    
-        break;
-       case  Saturday:
-          Number=6u;    
-        break;
-       case  Sunday:
-          Number=7u;  
-        break;
-       case (MonDay|Tuesday|Wednesday|Thursday|Friday):
-          Number=8u;   
-        break;
-       case (Sunday|Saturday):
-          Number=9u;  
-        break;
-       case (MonDay|Tuesday|Wednesday|Thursday|Friday|Saturday):
-          Number=10u;
-        break;
-       case (MonDay|Wednesday|Friday):
-          Number=11u;
-         break;
-       case (Tuesday|Thursday|Saturday):
-          Number=12u;
-         break;
-       case  (MonDay|Tuesday|Wednesday):
-          Number=13u;
-         break;
-       case  (Thursday|Friday|Saturday):
-          Number=14u; 
-         break;
-       default: 
-        break;
-    
-    }
-   return   Number; 
+    uint8_t Number = 0;
 
+    for (uint8_t i = 0; i < 15; i++) {
+       if (Mode == WeekModeTable[i]) {
+        Number = i;
+        break;
+       }
+    }
+    return Number;
 }
 //****************************************************************//
 //函数名称: void Timing_Action_Scan(void)
@@ -369,8 +332,8 @@ void Timing_Action_Scan(void){
            for(uint8_t j=0u;j<56u;j++){
      
               if(SystemInfo.time_channel[i].timing[j].enable){
-                   //定時的星期包含当前
-                  if(Timing_Week_Mode_Selcet(SystemInfo.time_channel[i].timing[j].week)&Current.Week){
+                   //定時的星期包含当前WeekModeTable[Ch->timing[i].week]
+                  if(WeekModeTable[SystemInfo.time_channel[i].timing[j].week]&Current.Week){
                   
                       if(SystemInfo.time_channel[i].timing[j].hour==Current.Hours){
                                                                           
@@ -385,12 +348,18 @@ void Timing_Action_Scan(void){
                   }
               }
               if(j==55){
+                  
                 if(Open_Count>0&&Close_Count==0){
+                    
                   Channel_Control(SystemInfo.time_channel[i].Index,RELAY_ON,change_flag);
+                    
                   if(SystemInfo.Current_Channel==i)
                     Lcd_Channel_State_Change_Fast_Flash(6);   
+                  
                 }else  if(Open_Count==0&&Close_Count>0){
+                    
                   Channel_Control(SystemInfo.time_channel[i].Index,RELAY_OFF,change_flag);
+                    
                   if(SystemInfo.Current_Channel==i)  
                     Lcd_Channel_State_Change_Fast_Flash(6);  
                 }
@@ -409,8 +378,9 @@ void Timing_Action_Scan(void){
 //***************************************************************//
 void Time_1ms_poll(void){
 
-       //低电压返回    
-   if(System.is_power_down)
+     SystemInfo_Save();
+     //低电压返回
+     if(System.is_power_down)
       return ;
    
      static uint32_t OldTick;
@@ -451,7 +421,7 @@ void Time_1ms_poll(void){
                    System.send_update_fail_enable=0;  
                    SystemInfo.system_state=normal;
                    SystemInfo.is_request_save=1;
-                   SystemInfo_Save();
+//                   SystemInfo_Save();
                    System.wait_connect_wifi_delays=200;
 
                 }

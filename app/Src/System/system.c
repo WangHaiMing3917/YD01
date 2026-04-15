@@ -4,9 +4,9 @@ SYSTEM_STRUCT System __attribute__ ((aligned (4u)));
 
 SYSTEM_INFO_STRUCT SystemInfo __attribute__ ((aligned (4u)));
 
-const BIN_FILE_NAME(file_name[16u]);
+//const BIN_FILE_NAME(file_name[16u]);
 //设备model
-const MODEL_NAME(model_name[50]);
+//const MODEL_NAME(model_name[50]);
 
 const uint16_t VERSION __attribute__ ((at(0x08003000))) =MCU_VERSION;
 
@@ -32,15 +32,40 @@ void System_PowerOn_Process(void){
 
    memset(&System, 0, sizeof(System));
    //系統数据读取
-   System_Memory_Init() ;
+   SystemInfo_Memory_Init() ;
    //液晶上电显示 
    Lcd_PowerOn_Display(); 
    //初始当前时间 
    Current_Clock_Init();  
    //使能低功耗时钟 
    LpTime1_Enable();     
-   //低压检测处理
+   //上电低压检测处理
    System_PowerOn_Voltage_Detect();
+}
+//****************************************************************//
+//函数名称: System_ChannelNumber_Check(void)
+//函数功能: 系统通道数量确认
+//参    数:
+//返 回 值:
+//说    明:
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void System_ChannelNumber_Check(void){
+
+  uint8_t data = SystemInfo.ChannelCount;
+    
+  if(Bsp_ChannelMode_Detect())
+    SystemInfo.ChannelCount = 3; 
+  else
+    SystemInfo.ChannelCount = 5;
+  
+  if(data != SystemInfo.ChannelCount){
+      
+     SystemInfo.is_request_save = 1u;
+     //将数据写入Flash的第一行
+//     SystemInfo_Save();
+  }
+
 }
 //****************************************************************//
 //函数名称: System_Mode_Set(uint8_t mode)
@@ -85,8 +110,6 @@ void System_Config_Load(void){
    Current.Week   = MonDay; 
    Current.channel= SystemInfo.Current_Channel;
    Current.Mode   = SystemInfo.time_channel[SystemInfo.Current_Channel-1].Mode;
-   for(uint8_t i=0;i<SystemInfo.ChannelCount;i++)
-     System.timer_Enable_Count[i]=SystemInfo.time_enable_count[i];
     
    for(uint8_t i=0;i<SystemInfo.ChannelCount;i++){
        
@@ -239,8 +262,6 @@ void System_Wifi_Connect_Init(void){
      Usart_Init();
          
      Bsp_Time8_Init();
-           
-     Bsp_Wifi_Model_Enable(); 
 
 }
 //****************************************************************//
@@ -256,8 +277,6 @@ void System_Wifi_Connect_DeInit(void){
      Usart_DeInit();
           
      Bsp_Time8_Deinit();
-          
-     Bsp_Wifi_Model_Disable(); 
 
 }
 //****************************************************************//
@@ -277,7 +296,7 @@ void System_PowerDown_UpdateStateProcess(void){
         
        SystemInfo.is_request_save=1;
            
-       SystemInfo_Save();
+//       SystemInfo_Save();
         
        Update_PowerDown_error_clear_All();    
        //取消发射
@@ -294,19 +313,17 @@ void System_PowerDown_UpdateStateProcess(void){
 //***************************************************************//
 void System_Connect_Wifi_Process(void){
     
-       //配置wifi需要用的硬件  
-       System_Wifi_Connect_Init();
+      //配置wifi需要用的硬件  
+      System_Wifi_Connect_Init();
 
        //等待2秒配置无线 
-     if(SystemInfo.system_state==normal){
-       //1秒后开始连接wifi
-       System.wait_connect_wifi_delays=200;
+      if(SystemInfo.system_state==normal){
+         //1秒后开始连接wifi
+         System.wait_connect_wifi_delays=200;
          
-       if(SystemInfo.wifi_in_factory){
-           
-         Protocol_Send_Restor();
-
-       }
+         if(SystemInfo.wifi_in_factory)
+           Protocol_Send_Restor();
+       
       }else if(SystemInfo.system_state==update_fail) {
        
          System.send_update_fail_enable=1;
@@ -341,7 +358,7 @@ void System_PowerState_Change_HardwareProcess(void){
        System_Connect_Wifi_Process();
      }
      
-    }else{
+   }else{
         
       if(System.wifi_hardware_is_init){
           
@@ -378,14 +395,15 @@ void System_PowerState_Change_HardwareProcess(void){
 //***************************************************************//
 void System_PowerOn_Voltage_Detect(void){
     
-    uint8_t state=Bsp_Power_Down_Scan();
-    std_delayms(100u); 
+    uint8_t state = Bsp_Power_Down_Scan();
+    
     if(!state)
        //掉电关继电器，关背光灯，设置低压标志位
-       Power_Down_State_Process();
+       Power_Down_Process();
     else
        //删除低压标志位
        Power_Down_Restore();
+    
     //根据电压状态配置电源
     System_PowerState_Change_HardwareProcess();
       //系统已初始化完毕
@@ -456,13 +474,22 @@ void System_PowerOn_ConfigModel(void){
    System_Disable_Send_Get_Down();
    //上电发射设置model
    if( System.Model_Interactive_Step==Send_Model){
-       
-     //定义一个特点长度的数组   
-     char send_model_name[(strlen(model_name)+strlen(cmd_model))*sizeof(char)];
+     uint8_t len=0; 
+     //定义一个特点长度的数组 
+     if(SystemInfo.ChannelCount==3)
+       len=   (strlen(ThreeChannelInfo[INFO_modle])+strlen(Cmd_Table[INDEX_CMD_MODEL]))*sizeof(char);
+     else
+       len=   (strlen(FiveChannelInfo[INFO_modle])+strlen(Cmd_Table[INDEX_CMD_MODEL]))*sizeof(char);
+     
+      char send_model_name[len];
      //填充model到数组
-     strcpy(send_model_name,cmd_model);
+     strcpy(send_model_name,Cmd_Table[INDEX_CMD_MODEL]);
+       
      //将字符串连接起来
-     strcat(send_model_name,model_name);
+     if(SystemInfo.ChannelCount==3)
+       strcat(send_model_name,ThreeChannelInfo[INFO_modle]);
+     else
+       strcat(send_model_name,FiveChannelInfo[INFO_modle]);
        
      strcpy(Searil.TxBuf,(char*)send_model_name); 
        
@@ -479,21 +506,30 @@ void System_PowerOn_ConfigModel(void){
      char cmd_set[5]=" set ";
 
      //计算数组总长度，不算截止符
-     arrary_number= Number_Of_Pid(DEVICE_PID)+(strlen(cmd_ble_config)+strlen(cmd_set))*sizeof(char)+5;
-       
-     char device_pid[Number_Of_Pid(DEVICE_PID)];
+     if(SystemInfo.ChannelCount==3)
+      arrary_number= (strlen(ThreeChannelInfo[INFO_SerialNum])+strlen(Cmd_Table[INDEX_CMD_BLE_CONFIG])+strlen(cmd_set))*sizeof(char)+5;
+     else
+      arrary_number= (strlen(FiveChannelInfo[INFO_SerialNum])+strlen(Cmd_Table[INDEX_CMD_BLE_CONFIG])+strlen(cmd_set))*sizeof(char)+5;
+     
+    // char device_pid[Number_Of_Pid(DEVICE_PID)];
        
      char send_ble_config[arrary_number];
+       
      char version[5];
      version[0]=' ';     
      version[1]=DEVICE_VERSION/1000+'0';
      version[2]=DEVICE_VERSION%1000/100+'0';
      version[3]=DEVICE_VERSION%1000%100/10+'0';
      version[4]=DEVICE_VERSION%1000%100%10+'0';
-     strcpy(send_ble_config,cmd_ble_config);
+     strcpy(send_ble_config,Cmd_Table[INDEX_CMD_BLE_CONFIG]);
      strcat(send_ble_config,cmd_set);
-     sprintf(device_pid,"%d",DEVICE_PID);
-     strcat(send_ble_config,device_pid);
+       
+   //  sprintf(device_pid,"%d",DEVICE_PID);
+     if(SystemInfo.ChannelCount==3)
+       strcat(send_ble_config,ThreeChannelInfo[INFO_SerialNum]);
+     else
+       strcat(send_ble_config,FiveChannelInfo[INFO_SerialNum]);
+     
      strcat(send_ble_config,version);
      
      strcpy(Searil.TxBuf,(char*)send_ble_config); 
@@ -507,13 +543,13 @@ void System_PowerOn_ConfigModel(void){
    } else if(System.Model_Interactive_Step==Send_Mcu_Version ){
     
       char number[5]={0};
-      char send_mcu_version[(strlen(cmd_mcu_version)+strlen(number))*sizeof(char)];
+      char send_mcu_version[(strlen(Cmd_Table[INDEX_CMD_MCU_VERSION])+strlen(number))*sizeof(char)];
       number[0]=' ';
       number[1]=VERSION/1000+'0';
       number[2]=VERSION%1000/100+'0';
       number[3]=VERSION%1000%100/10+'0';
       number[4]=VERSION%1000%100%10+'0';
-      strcpy(send_mcu_version,cmd_mcu_version);
+      strcpy(send_mcu_version,Cmd_Table[INDEX_CMD_MCU_VERSION]);
       strcat(send_mcu_version,number);
       
       strcpy(Searil.TxBuf,(char*)send_mcu_version); 
@@ -623,7 +659,6 @@ void Jump_Process(void){
       System_JumpBoot_DeintProcess();
       /* 关闭中断 这个非常重要,如果没有关闭boot下的中断,很容易跳到app后被卡死*/
 
-
      /* 初始化app栈指针 */
 
       __set_MSP(*(__IO uint32_t*) 0x08000000);
@@ -643,6 +678,7 @@ void Jump_Process(void){
 void System_Enable_Send_Get_Down(void){
 
      System.send_get_down_enable=1;
+    
      System.get_down_delays=10;
 
 }
@@ -694,23 +730,25 @@ void System_PowerDown_Exit_Deint(void){
 
 }
 //****************************************************************//
-//函数名称:void Power_Down_State_Process(void)
-//函数功能: 掉电状态处理
+//函数名称:void Power_Down_Process(void)
+//函数功能: 掉电处理
 //参    数:
 //返 回 值:
 //说    明: 
 //修改记录: 2024.9.26 Whm创建函数
 //***************************************************************//
-void Power_Down_State_Process(void){
+void Power_Down_Process(void){
     
    //掉电情况下,继电器是打开的,则关闭，但是不改变标志位
-  for(uint8_t i=0;i<SystemInfo.ChannelCount;i++){
+   for(uint8_t i=0;i<SystemInfo.ChannelCount;i++){
   
       if(SystemInfo.time_channel[i].Relays_States)
          Channel_Control(i,RELAY_OFF,without_change_flag);
       
-  }
+   }
+   
    System.is_power_down=1;
+   
    System_Back_Led_Close();
 
 }
@@ -763,7 +801,7 @@ void System_Back_Led_Close(void){
 
     if(System.back_led_state){
    
-       Bsp_BackLight_Close(); 
+       Bsp_Back_Light_Close(); 
        System.back_led_state=0;
         
     }
@@ -784,7 +822,7 @@ void PowerDown_FroceSaveInfo(void){
        if( SystemInfo.crc16!=crc16) {
          SystemInfo.is_request_save=1u;
          //将数据写入Flash的第一行
-         SystemInfo_Save(); 
+//         SystemInfo_Save(); 
        }
     }
 

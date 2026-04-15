@@ -103,8 +103,11 @@ void Rtc_Process(void){
               System.count_power_on=0;
              //检测到电压恢复，且之前是掉电状态，则恢复背光    
              if(System.is_power_down) {
+                 
                 Power_Down_Restore();
+                 
                 Lcd_BackLight_Open();
+                 
                 if(!System.wifi_hardware_is_init){
                   //关闭所有按键的中断
                   Bsp_Key_Exit_Disable();
@@ -176,6 +179,7 @@ void RTC_TAMP_IRQHandler(void)
         std_rtc_clear_flag(RTC_CLEAR_2HZ);
         
         Rtc_Process();
+        
         Rtc_TimeOut_Process(); 
     }
 }

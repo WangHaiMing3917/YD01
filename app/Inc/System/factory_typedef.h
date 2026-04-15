@@ -12,7 +12,10 @@ typedef struct{
     uint8_t  key_item;                  //工厂按键测试项目
     uint16_t delays;
     uint16_t factory_check_net_delays; //
-
+    uint16_t relays_count;
+    
+    uint8_t  channel;
+    uint8_t  idle;
 }FACTORY_STRUCT;
 extern FACTORY_STRUCT factory;
 

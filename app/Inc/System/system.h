@@ -8,8 +8,8 @@
 #include "Key.h"
 #include "Channel.h"
 #include "timing.h"
-#include "lptimer.h"
 #include "protocol.h"
+#include "lptimer.h"
 #include "upgrade.h"
 #include "usart.h"
 #include "Sleep.h"
@@ -24,7 +24,9 @@ extern const uint16_t VERSION ;
 
 
 
-void System_PowerOn_Process(void);
+extern void System_PowerOn_Process(void);
+extern void System_ChannelNumber_Check(void);
+
 void System_Mode_Set(uint8_t mode);
 uint8_t System_Mode_Read(void);
 
@@ -55,8 +57,8 @@ void System_Connect_Wifi_Process(void);
 void System_PowerDown_Exit_Config(void);
 void System_PowerDown_Exit_Deint(void);
 
-void Power_Down_State_Process(void);
-void Power_Down_Restore(void);
+extern void Power_Down_Process(void);
+extern void Power_Down_Restore(void);
 
 void System_Back_Led_Close(void);
 void System_Back_Led_Open(void);

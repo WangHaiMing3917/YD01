@@ -5,15 +5,43 @@
 
 #include "stdint.h"
 
+typedef enum {
+    
+    INDEX_CMD_MODEL = 0,
+    INDEX_CMD_BLE_CONFIG,
+    INDEX_CMD_MCU_VERSION,
+    INDEX_CMD_GET_DOWN,
+    INDEX_CMD_RESULT,
+    INDEX_CMD_ERROR,
+    INDEX_CMD_PROPERTIES_CHANGED,
+    INDEX_CMD_EVENT_OCCURED,
+    INDEX_CMD_SET_PROPERTIES,
+    INDEX_CMD_GET_PROPERTIES,
+    INDEX_CMD_ACTION,
+    INDEX_CMD_MIIO_NET_CHANGE,
+    INDEX_CMD_UPDATE_FW,
+    INDEX_CMD_ECHO,
+    INDEX_CMD_BOOT_FAIL,
+    INDEX_CMD_NET,
+    INDEX_CMD_TIME,
+    INDEX_CMD_MAC,
+    INDEX_CMD_VERSION,
+    INDEX_CMD_HELP,
+    INDEX_CMD_TRUE,
+    INDEX_CMD_FALSE,
+    INDEX_CMD_RESTORE,
+    INDEX_CMD_FACTORY,
+    INDEX_CMD_RESULT_READY,
+    INDEX_CMD_MAX_COUNT 
+} CmdIndex;
+
+
+
 enum{
 
-   Tx_Idle=0,
-   Tx_Request,
-   Tx_Delayed,
-   Tx_WaitAck,
-   Tx_WaitComplete,
-   Tx_Repeat,
-
+   INFO_modle = 0,
+   INFO_SerialNum,
+    
 };
 
 
@@ -22,7 +50,6 @@ typedef struct{
   uint8_t   Rx_Start             :1u;
   uint8_t   Rx_Complete          :1u;
   uint8_t   wait_send_start      :1u;
-//  uint8_t   use_cache_data       :1u;
   uint8_t   idle                 :5u;
   uint8_t   Tx_State;
   uint8_t   Rx_State;
@@ -48,6 +75,7 @@ typedef struct{
   char      RxBuf[520];
   char      TxBufCache[512];
 }SEARIL_STRUCT;
+
 extern SEARIL_STRUCT  Searil;
 
 enum{

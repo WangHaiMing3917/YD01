@@ -108,7 +108,8 @@ enum{
    factory_disp_number,
    factory_control_relays,
    factory_test_key,
-   Factory_Step_4, 
+   factory_disp_relay_count,
+
     
 };
 enum{

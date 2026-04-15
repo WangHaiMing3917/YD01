@@ -32,15 +32,16 @@
 #define MEMORY_ENDMSP              MEMORY_STATE+1
 
 
-uint8_t SystemInfo_IsInitialized(void);
-void System_Memory_Init(void);
-void SystemInfo_Save(void);
-void System_Save_WriteToFlash(uint32_t addr,uint32_t *pdata,uint16_t length,erase_type_t erase_type);
+extern uint8_t SystemInfo_IsInitialized(void);
+extern void SystemInfo_Memory_Init(void);
+extern void SystemInfo_Save(void);
+extern void System_Save_WriteToFlash(uint32_t addr,uint32_t *pdata,uint16_t length,erase_type_t erase_type);
 
-void Check_Near_CurrentTime_Arrary(TIMING_INFO *Ch);
-void SystemInfo_Init(void);
+extern void Check_Near_CurrentTime_Arrary(TIMING_INFO *Ch);
+extern void SystemInfo_Init(void);
 
-
+ 
+extern void SystemInfo_Relay_Count_Increase(uint8_t channel);
 
 
 

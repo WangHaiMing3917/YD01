@@ -1,21 +1,13 @@
 #include "system.h"
 
 
-RELAY_STRUCT RELAYS_INDEX[CHANNEL_NUMBER]={
+RELAY_STRUCT RELAYS_INDEX[5]={
 
   {(GPIO_t*)RELAYS_CHANNEL_1_PORT,RELAYS_CHANNEL_1_PIN},
-  #if CHANNEL_NUMBER >=2
   {(GPIO_t*)RELAYS_CHANNEL_2_PORT,RELAYS_CHANNEL_2_PIN},
-  #endif
-  #if CHANNEL_NUMBER >=3 
   {(GPIO_t*)RELAYS_CHANNEL_3_PORT,RELAYS_CHANNEL_3_PIN},
-  #endif
-  #if CHANNEL_NUMBER >=4 
   {(GPIO_t*)RELAYS_CHANNEL_4_PORT,RELAYS_CHANNEL_4_PIN},
-  #endif
-  #if CHANNEL_NUMBER >=5 
   {(GPIO_t*)RELAYS_CHANNEL_5_PORT,RELAYS_CHANNEL_5_PIN},
-  #endif
 };
 
 
@@ -35,16 +27,13 @@ void Channel_Control(uint8_t index,uint8_t state,uint8_t flag){
     if(state){
 
         Bsp_Relays_Open(RELAYS_INDEX[index].port_t,RELAYS_INDEX[index].pin);
-       #ifndef NO_LED_PIN
-        Bsp_Relays_Led_Open(RELASY_LED_1_PORT,RELASY_LED_1_PIN);  
-      #endif
+        
+        SystemInfo_Relay_Count_Increase(index);
+        
        if(flag)
          SystemInfo.time_channel[index].Relays_States=1u;
     }else{
       Bsp_Relays_Close(RELAYS_INDEX[index].port_t,RELAYS_INDEX[index].pin);
-      #ifndef NO_LED_PIN  
-      Bsp_Relays_Led_Close(RELASY_LED_1_PORT,RELASY_LED_1_PIN); 
-      #endif
       if(flag)
         SystemInfo.time_channel[index].Relays_States=0u;
     }

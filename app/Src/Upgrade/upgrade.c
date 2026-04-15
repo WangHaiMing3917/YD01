@@ -234,7 +234,7 @@ void Update_Recive(XMODEM_STRUCT *Rtr){
                SystemInfo.system_state=update_wait_check;
                SystemInfo.upgrade_pack_number=Update.packs_count;
                SystemInfo.is_request_save=1;
-               SystemInfo_Save();
+              // SystemInfo_Save();
                Update.wait_send_eot_end=1;
                Send_Ack_Xmodem(); 
         
@@ -325,7 +325,7 @@ void Update_CAN_Process(void){
         //Éý¼¶½áÊø
         SystemInfo.system_state=normal;
         SystemInfo.is_request_save=1;
-        SystemInfo_Save();
+//        SystemInfo_Save();
         Update.wait_send_can_update=0;
         System.update_fail_send_times=0;
         System.send_update_fail_enable=1;

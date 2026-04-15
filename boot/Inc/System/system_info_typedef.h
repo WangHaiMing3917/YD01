@@ -65,7 +65,7 @@ typedef union{
       uint8_t     keylocked;                 //214 859  
       uint8_t     time_enable_count[5];      //
       uint8_t     idle[158u];                //..........   
-                                             //256 1020 1021 1022
+
       uint8_t     endMsp;                    //    1023
    };
 

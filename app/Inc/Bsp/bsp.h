@@ -98,22 +98,22 @@ void Bsp_Time3_Deinit(void);
 void Bsp_Erase_Page(uint8_t PageNumber,uint8_t length);
 void Bsp_Write_Flash_Word(uint32_t Address,uint32_t *Buff,uint16_t length);
 
-
-void Bsp_Wifi_Model_Enable(void);
-void Bsp_Wifi_Model_Disable(void);
-void Bsp_Wifi_Io_Init(void);
+extern void Bsp_Wifi_Io_Init(void);
+extern void Bsp_ChannelMode_Init(void);
+extern uint8_t Bsp_ChannelMode_Detect(void);
+extern void Bsp_Gpio_Init(void);
+extern void Bsp_Back_Light_Open(void);
+extern void Bsp_Back_Light_Close(void);
+extern void Bsp_Relays_Channel_Init(uint8_t Channel_Count);
 
 
 void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask);
 void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask);
 
-void Bsp_Relays_Led_Open(GPIO_t* gpiox, uint32_t pin_mask);
-void Bsp_Relays_Led_Close(GPIO_t* gpiox, uint32_t pin_mask);
-
-void Bsp_BackLight_Close(void);
+void Bsp_Back_Light_Close(void);
 void Bsp_Back_Light_Open(void);
 
-void Bsp_Power_Down_Exit_Init(void);
+extern void Bsp_Power_Down_Exit_Init(void);
 void Bsp_Power_Down_Exit_Deint(void);
 
 

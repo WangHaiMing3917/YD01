@@ -164,42 +164,94 @@ void SystemInfo_Init(void){
      SystemInfo.endMsp = 0x55;
      SystemInfo.system_state=normal;
      SystemInfo.upgrade_pack_number=0;
-     SystemInfo.ChannelCount=CHANNEL_NUMBER;
      SystemInfo.Current_Channel= 1;
      SystemInfo.wifi_in_factory=0;
      SystemInfo.keylocked=0;
      SystemInfo.index = 255u;
+     //通道数量确认
+     System_ChannelNumber_Check();
+    
      SystemInfo_Timing_Init();
     
      SystemInfo.is_request_save=1u;
      //将数据写入Flash的第一行
-     SystemInfo_Save();
+//   SystemInfo_Save();
 
   }
 //****************************************************************//
-//函数名称: void System_Memory_Init(void)
+//函数名称: void SystemInfo_Restore_Check(void)
+//函数功能: 系统数据复位确认
+//参    数:
+//返 回 值: 
+//说    明: 
+//修改记录: 2026.4.9 创建函数whm
+//***************************************************************//
+void SystemInfo_Restore_Check(void){
+
+    
+    if((std_rcc_get_reset_flag(RCC_RESET_FLAG_NRST)==1) && (std_rcc_get_reset_flag(RCC_RESET_FLAG_PMU) == 0) ){
+        
+       SystemInfo_Load();
+        
+       uint8_t index =  SystemInfo.Relay_count_ctl.index_num;
+        
+       uint16_t data[6][5];
+        
+       memcpy(data[0],SystemInfo.Relay_count_ctl.channel_count_index[0],30);
+
+       Bsp_Erase_Page((SYSTEM_INFO_ADDRESS-0x8000000)/512u,(SYSTEM_INFO_LENGTH/512));
+        
+       Protocol_Cmd_Cache(CMD_RESTORE);
+        
+       SystemInfo_Init(); 
+        
+       SystemInfo.Relay_count_ctl.index_num = index; 
+        
+       memcpy(SystemInfo.Relay_count_ctl.channel_count_index[0],data[0],30); 
+        
+    }
+    //清除复位标记位
+    std_rcc_clear_reset_flags();
+}
+
+//****************************************************************//
+//函数名称: void SystemInfo_Relay_Count_Increase(uint8_t channel)
+//函数功能: 继电器计数增加
+//参    数:
+//返 回 值: 
+//说    明: 
+//修改记录: 2026.4.9 创建函数whm
+//***************************************************************//
+void SystemInfo_Relay_Count_Increase(uint8_t channel){
+
+      SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][channel]++;
+
+}
+//****************************************************************//
+//函数名称: void SystemInfo_Memory_Init(void)
 //函数功能: 内存数据初始化
 //参    数:
 //返 回 值: 
 //说    明: 
 //修改记录: 2023.7.27 创建函数whm
 //***************************************************************//
-void System_Memory_Init(void){
+void SystemInfo_Memory_Init(void){
 
-    
+     //保证数据稳定
     std_delayms(100);
-    //复位脚复位
-    if(std_rcc_get_reset_flag(RCC_RESET_FLAG_NRST)==1&&std_rcc_get_reset_flag(RCC_RESET_FLAG_PMU)==0)   {
-       Bsp_Erase_Page((SYSTEM_INFO_ADDRESS-0x8000000)/512u,(SYSTEM_INFO_LENGTH/512));
-       Protocol_Cmd_Cache(CMD_RESTORE);
-    }
-    std_rcc_clear_reset_flags();
-    std_delayms(50);
-    if (SystemInfo_IsInitialized())             //判断是否初始化
-      SystemInfo_Load();                        //载入配置信息
-    else
-      SystemInfo_Init();                       //系统信息初始化
     
+    if (SystemInfo_IsInitialized()){            //判断是否初始化
+        
+      SystemInfo_Load();                        //载入配置信息
+        
+      System_ChannelNumber_Check();
+        
+    }else
+      SystemInfo_Init();                       //系统信息初始化
+        //复位脚复位
+    SystemInfo_Restore_Check();
+
+
 
 }
 

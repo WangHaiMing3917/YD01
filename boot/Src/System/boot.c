@@ -64,7 +64,9 @@ void Jump_Process(void){
 int main(void){
 
      Bsp_Init();
+    
      std_delayms(100);
+    
      System_Memory_Init();
 
      while(1){

@@ -4,32 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "protocol_typedef.h"
+ #include "protocol_typedef.h"
 
-extern const char cmd_model[];
-extern const char cmd_ble_config[];
-extern const char cmd_mcu_version[];
-extern const char cmd_get_down[];
-extern const char cmd_result[];
-extern const char cmd_error[];
-extern const char cmd_properties_changed[];
-extern const char cmd_event_occured[];
-extern const char cmd_set_properties[];
-extern const char cmd_get_properties[];
-extern const char cmd_action[];
-extern const char cmd_miio_net_change[];
-extern const char cmd_update_fw[];
-extern const char cmd_echo[];
-extern const char cmd_reboot;
-extern const char cmd_restore[];
-extern const char cmd_factory[];
-extern const char cmd_net[];
-extern const char cmd_time[];
-extern const char cmd_mac[];
-extern const char cmd_version[];
-extern const char cmd_hellp[];
-
-
+extern const char Cmd_Table[INDEX_CMD_MAX_COUNT][32];
+extern const char ThreeChannelInfo[][22];
+extern const char FiveChannelInfo[][22];
 void Protocol_SerialTxCommProcess(void);
 void Protocol_SerialRxCommProcess(void);
 
@@ -40,7 +19,7 @@ void Protocol_Switch_Status(uint8_t On_Off,uint8_t channel);
 void Protocol_TimingGroup_Set(char *temp,uint8_t ch);
 void Protocol_Change_Mode(uint8_t mode,uint8_t channel);
 //void Protocol_Send_Msg(char*data,uint16_t length,uint8_t send_times,uint8_t type);
-void Protocol_Down_Set_Properties_Process(uint8_t group);
+void Protocol_Down_Set_Properties_Process(uint8_t Count);
 
 uint16_t Protocol_Start_Number(char *data);
 void Protocol_Send_Boot_Fail(void);

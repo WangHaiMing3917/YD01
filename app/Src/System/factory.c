@@ -18,9 +18,13 @@ void Factory_Send_Connect_Wifi(void){
   if(System_Mode_Read()==Factory_Mode){
 
     if(factory.item==factory_test_key){   
+        
         if(!factory.will_connect_wifi){
+            
            factory.will_connect_wifi=1;
+            
            Protocol_Send_Factory();
+            
         }
     }
 
@@ -37,7 +41,7 @@ void Factory_Send_Connect_Wifi(void){
 void Factory_Cyc_Check_Net(void){
 
    SystemInfo.wifi_in_factory=1;
-   SystemInfo_Save(); 
+//   SystemInfo_Save(); 
    factory.factory_check_net_delays=500;
 }
 //****************************************************************//
@@ -55,7 +59,9 @@ void Factory_Check_Net_Timer(void){
         if(factory.factory_check_net_delays){
         
             if(--factory.factory_check_net_delays==0){
+                
                Protocol_Cmd_Cache(CMD_GET_NET);
+                
                factory.factory_check_net_delays=500; 
             }
         }
@@ -90,7 +96,9 @@ void Factory_Key_Release_ConnectWifi(void){
    if(factory.item==factory_test_key){
        
        factory.key_item=Factory_Key_Step_None;
+       
        Factory_Send_Connect_Wifi();
+       
        Display.update_lcd=1;
    }
 }

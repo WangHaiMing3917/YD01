@@ -13,11 +13,9 @@
 void LpTime1_Porcess(void){
 
   Key_Timer();
-    
-  //Í¨µÀ¿ìÉÁ 
- #if CHANNEL_NUMBER >=2
+
   Lcd_Channel_Fast_Flash_Timer();
- #endif  
+
   Sleep.wakeup_type=wake_up_by_lptime ;
 }
 //****************************************************************//

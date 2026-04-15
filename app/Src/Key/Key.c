@@ -70,7 +70,7 @@ void EXTI0_1_IRQHandler(void)
             
           System.count_power_on=0;
             
-          Power_Down_State_Process();
+          Power_Down_Process();
             
           Protocol_Cmd_Clear();
           System.Properties_Change_Scan_Delays=0;
@@ -97,7 +97,7 @@ void EXTI0_1_IRQHandler(void)
               
             SystemInfo.is_request_save=1u;
              //将数据写入Flash的第一行
-            SystemInfo_Save(); 
+           // SystemInfo_Save(); 
           }  
             Into_Sleep_Mode(); 
         }
@@ -178,6 +178,7 @@ void Key_Trg_Process(void){
    if(Key.Trg){
        
       Key.HoldFlag=0;
+       
       Lcd_BackLight_Open();
       
       if(Key_is_Locked())
@@ -185,10 +186,7 @@ void Key_Trg_Process(void){
       switch(Key.Trg){
           
          case KEY_MODE:
-           #if CHANNEL_NUMBER == 1   
-           if(System_Mode_Read()==Normal_Mode)
-             Channel_Mode_Changed();
-           #endif
+
          break;
        
          default:
@@ -326,6 +324,7 @@ void Key_Value_Process(void){
   if(Key.Value){
       
     Lcd_BackLight_Open();
+      
     if(System_Mode_Read()>Normal_Mode && System_Mode_Read()<Factory_Mode)
       System_TimeOut_Set(20u);
     if(Key.HoldFlag==hold_0){
@@ -344,15 +343,17 @@ void Key_Value_Process(void){
 
             }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key){
+                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    
                    factory.key_item=Factory_Key_Step_2;
                    Display.update_lcd=1;
+                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][1];
+                   factory.channel = 2; 
                 }
             }
          break;
         case KEY_TIMING:
-          #if CHANNEL_NUMBER >=2  
+
            if(System_Mode_Read()==Normal_Mode){
            
               Display.col_not_flash=0u;            //恢复显示冒号闪烁
@@ -370,19 +371,7 @@ void Key_Value_Process(void){
               Key.HoldFlag=hold_start_2000;
               Key.Delays=40u;  
            }
-          #else
-          if( System_Mode_Read()==Normal_Mode){
-              
-               Key.HoldFlag=hold_start_1000;
-               Key.Delays=20u;
-               System_Mode_Set(Set_Timing_Mode); 
-               System.timing_index  =0;
-               Display.update_lcd=1;
-               Display.col_not_flash=1u;
-               System.timing_week_number=(SystemInfo.time_channel[System.timing_channel_number-1].timing[System.timing_index].week);
-                    
-          }    
-          #endif
+
           else if(System_Mode_Read()==Set_Timing_Mode){
               Key.HoldFlag=hold_start_2000;
               Key.Delays=40u;  
@@ -403,9 +392,11 @@ void Key_Value_Process(void){
               Key.Delays=20u;    
            }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key){
+                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    factory.key_item=Factory_Key_Step_3;
                    Display.update_lcd=1;  
+                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][2];
+                   factory.channel = 3; 
                 }
             }
          break;
@@ -436,15 +427,17 @@ void Key_Value_Process(void){
                 
             }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key){
+                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
+                    
                    factory.key_item=Factory_Key_Step_4;
                    Display.update_lcd=1;
+                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][3];
+                   factory.channel = 4; 
                 }
             }
          break;
         case KEY_MODE:
           //开始计时模式
-          #if CHANNEL_NUMBER>=2
           if(System_Mode_Read()==Normal_Mode){
                //通道快闪
                Key.HoldFlag=hold_start_600;
@@ -462,10 +455,7 @@ void Key_Value_Process(void){
                Display.update_lcd=1;
           }
 
-          else if(System_Mode_Read()>Normal_Mode && System_Mode_Read()<=Set_Current_Week_Mode){
-          #else
-          if(System_Mode_Read()>Normal_Mode&& System_Mode_Read()<=Set_Current_Week_Mode){
-          #endif     
+          else if(System_Mode_Read()>Normal_Mode && System_Mode_Read()<=Set_Current_Week_Mode){  
                Display.update_lcd=1;
                Current.Sec=0u;
           }else if(System_Mode_Read()==Set_Timing_Mode){
@@ -515,9 +505,11 @@ void Key_Value_Process(void){
                Display.update_lcd=1;
           }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key){
+                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    factory.key_item=Factory_Key_Step_5;
                    Display.update_lcd=1;
+                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][4];
+                   factory.channel =5;
                 }
           }
 
@@ -536,9 +528,11 @@ void Key_Value_Process(void){
                  Key_Value_Inc_Cyc(KEY_HOURS,0);
             }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key){
+                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    factory.key_item=Factory_Key_Step_1;
                    Display.update_lcd=1;
+                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][0];
+                   factory.channel =1;
                 }
             }
          break;
@@ -548,6 +542,15 @@ void Key_Value_Process(void){
                
                Key.HoldFlag=hold_start_1000;
                Key.Delays=20;  
+            
+            } else if(System_Mode_Read()==Factory_Mode){
+                
+               if(factory.item==factory_test_key){
+                   
+                  factory.item =  factory_disp_relay_count;
+                   
+                  Display.update_lcd=1; 
+               }
             
             }
          break;
@@ -583,7 +586,7 @@ void Key_Value_Process(void){
     }else if(Key.HoldFlag==hold_already_1000){
         
       switch(Key.Value){
-     #if CHANNEL_NUMBER >= 2       
+
        case  KEY_MODE:
          //通道+1，允许显示模式，通道开始闪烁
         if(System_Mode_Read()==Normal_Mode){
@@ -598,7 +601,7 @@ void Key_Value_Process(void){
             Display.update_lcd=1;
         }
        break;
-     #endif
+
       case  (KEY_HOURS+KEY_MINUTES):
            if(SystemInfo.keylocked)
              SystemInfo.keylocked=0;
@@ -655,9 +658,7 @@ void Key_Value_Process(void){
                     Display.update_lcd=1;  
                     //通道定时更改扫描，
                     Check_Near_CurrentTime_Arrary((TIMING_INFO*)&SystemInfo.time_channel[System.timing_channel_number-1]);
-                    #if CHANNEL_NUMBER >= 2
                     Current.channel =System.timing_channel_number;
-                    #endif
 
                }else if(System_Mode_Read()==Select_Channel_Mode){
                
@@ -666,9 +667,8 @@ void Key_Value_Process(void){
                     System_Mode_Set(Normal_Mode);
                     Display.col_not_flash=0u;
                     Display.update_lcd=1;  
-                    #if CHANNEL_NUMBER >= 2
                     Current.channel =System.timing_channel_number;
-                    #endif
+
                }
               /*
             #endif
@@ -687,9 +687,7 @@ void Key_Value_Process(void){
                     System_Mode_Set(Normal_Mode);
                     Display.col_not_flash=0u;
                     Display.update_lcd=1;  
-                    #if CHANNEL_NUMBER >= 2
                     Current.channel =System.timing_channel_number;
-                    #endif
                }
 
               break;
@@ -715,8 +713,7 @@ void Key_Value_Process(void){
            case KEY_MINUTES:
              if(System_Mode_Read()==Set_Current_Minutes_Mode||System_Mode_Read()==Set_Timing_Mode) 
                 Key_Value_Inc_Cyc(KEY_MINUTES,1);
-             break;
-        #if CHANNEL_NUMBER >= 2       
+             break; 
            case  KEY_MODE:
              if(System_Mode_Read()==Normal_Mode){
                 //不显示模式
@@ -732,9 +729,7 @@ void Key_Value_Process(void){
            
                 Display.update_lcd=1;
              }
-
              break;
-       #endif
            default:
              break;
         }
@@ -760,10 +755,10 @@ void Key_Release_Process(void){
        Key. release_delays=1;
         switch(Key.Release){
         
-      #if CHANNEL_NUMBER >= 2
           case KEY_MODE:
-              
-               if(System_Mode_Read()==Normal_Mode){  
+               if(System_Mode_Read()==Factory_Mode)
+                Factory_Key_Release_ConnectWifi(); 
+               else if(System_Mode_Read()==Normal_Mode){  
                    
                   Display.not_disp_mode=0u;
                   if(Key.HoldFlag==hold_start_600&&!System.not_process_release)
@@ -771,12 +766,7 @@ void Key_Release_Process(void){
                }   
        
            break;
-        #else
-          case KEY_MODE:
-        #endif
-
           case KEY_TIMING:
-            #if CHANNEL_NUMBER >= 2
              if(System_Mode_Read()==Factory_Mode)
                 Factory_Key_Release_ConnectWifi();
              else if(System_Mode_Read()==Select_Channel_Mode){
@@ -793,7 +783,6 @@ void Key_Release_Process(void){
                   System.timing_week_number=(SystemInfo.time_channel[System.timing_channel_number-1].timing[System.timing_index].week);
                 }
              }
-           #endif
               break;
           case KEY_WEEKS:
           case KEY_HOURS:

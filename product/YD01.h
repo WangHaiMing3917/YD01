@@ -10,15 +10,16 @@
 #define VERSION_L                  0.0
 //文件名
 #define BIN_FILE_NAME(x)           uint8_t x = {"P30WXM.bin"}
-#define MODEL_NAME(y)              char y= {" cnph.plug.yd01"}
+
+//#define MODEL_NAME(y)              char y= {" cnph.plug.p30wxm"}
 //app_pid
-#define DEVICE_PID                 31968u                     
+//#define DEVICE_PID                 31968u                     
 //对应app_软件版本
 #define DEVICE_VERSION             1u
 
-#define MCU_VERSION                2u
+#define MCU_VERSION                1u
 //编译时间
-#define AP_DATE                    {'2','0','2','5','1','2','1','1'}
+#define AP_DATE                    {'2','0','2','6','0','4','1','4'}
 
 
 //LCD_SEG脚配置
@@ -52,15 +53,13 @@
 #define CHANNEL_NUMBER                 3u
 //使用R8T6芯片
 #define LCD_CUL51R8T6
-//无LED
-#define NO_LED_PIN
 //使用串口1
 #define USED_USART_1
 
-#define KEY_MINUTE_PORT                GPIOC
-#define KEY_MINUTE_PIN                 GPIO_PIN_1
-#define KEY_MINUTE_EXTI_PORT           EXTI_GPIOC
-#define KEY_MINUTE_EXTI_LINE           EXTI_LINE_GPIO_PIN1
+#define KEY_MINUTE_PORT                GPIOB
+#define KEY_MINUTE_PIN                 GPIO_PIN_11
+#define KEY_MINUTE_EXTI_PORT           EXTI_GPIOB
+#define KEY_MINUTE_EXTI_LINE           EXTI_LINE_GPIO_PIN11
 
 #define KEY_TIMING_PORT                GPIOC
 #define KEY_TIMING_PIN                 GPIO_PIN_2
@@ -72,10 +71,10 @@
 #define KEY_WEEKS_EXTI_PORT            EXTI_GPIOC
 #define KEY_WEEKS_EXTI_LINE            EXTI_LINE_GPIO_PIN0
 
-#define KEY_MODE_PORT                  GPIOB
-#define KEY_MODE_PIN                   GPIO_PIN_11
-#define KEY_MODE_EXTI_PORT             EXTI_GPIOB
-#define KEY_MODE_EXTI_LINE             EXTI_LINE_GPIO_PIN11
+#define KEY_MODE_PORT                  GPIOC
+#define KEY_MODE_PIN                   GPIO_PIN_1
+#define KEY_MODE_EXTI_PORT             EXTI_GPIOC
+#define KEY_MODE_EXTI_LINE             EXTI_LINE_GPIO_PIN1
 
 #define KEY_HOURS_PORT                 GPIOB
 #define KEY_HOURS_PIN                  GPIO_PIN_12
@@ -100,9 +99,6 @@
 #define BACK_LIGHT_PORT                GPIOC
 #define BACK_LIGHT_PIN                 GPIO_PIN_8
 
-#define RELASY_LED_1_PORT              GPIOA
-#define RELASY_LED_1_PIN               GPIO_PIN_13
-
 #define USART_TX_PORT                  GPIOA
 #define USART_TX_PIN                   GPIO_PIN_2
 
@@ -114,6 +110,8 @@
 #define POWER_DOWN_EXTI_PORT           EXTI_GPIOA
 #define POWER_DOWN_EXTI_LINE           EXTI_LINE_GPIO_PIN0
 
+#define MODE_PORT                      GPIOC
+#define MODE_PIN                       GPIO_PIN_3
 
 #define BLUETOOTH_DETECTION_PORT       GPIOA
 #define BLUETOOTH_DETECTION_PIN        GPIO_PIN_3

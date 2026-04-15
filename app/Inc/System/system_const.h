@@ -2,7 +2,16 @@
 #define _SYSTEM_CONST_H_
 
 
+enum{
 
+   Tx_Idle=0,
+   Tx_Request,
+   Tx_Delayed,
+   Tx_WaitAck,
+   Tx_WaitComplete,
+   Tx_Repeat,
+
+};
 
 enum{
 

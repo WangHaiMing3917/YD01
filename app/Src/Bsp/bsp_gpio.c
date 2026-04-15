@@ -1,5 +1,5 @@
 #include "bsp.h"
-
+#include "system_info.h"
 
 
 //****************************************************************//
@@ -12,218 +12,47 @@
 //***************************************************************//
 void Bsp_Wifi_Io_Init(void){
     
-      std_gpio_init_t Gpio_Init = {0};
+    std_gpio_init_t Gpio_Init = {0};
    
-      /*wifi模块使能*/
-      Gpio_Init.mode = GPIO_MODE_INPUT;
-      Gpio_Init.pull = GPIO_NOPULL; 
-      Gpio_Init.pin =  BLUETOOTH_DETECTION_PIN;
-      std_gpio_init(BLUETOOTH_DETECTION_PORT, &Gpio_Init);
+    /*wifi模块使能*/
+    Gpio_Init.mode = GPIO_MODE_INPUT;
+    Gpio_Init.pull = GPIO_NOPULL; 
+    Gpio_Init.pin =  BLUETOOTH_DETECTION_PIN;
+    std_gpio_init(BLUETOOTH_DETECTION_PORT, &Gpio_Init);
 
 }
 //****************************************************************//
-//函数名称: void Bsp_Wifi_Model_Enable(void)
-//函数功能: wifi模块使能
-//参    数:
-//返 回 值:
-//说    明:
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Wifi_Model_Enable(void){
-
-   // std_gpio_set_pin(BLUETOOTH_DETECTION_PORT,BLUETOOTH_DETECTION_PIN);
-   
-}
-//****************************************************************//
-//函数名称: void Bsp_Wifi_Model_Disable(void)
-//函数功能: wifi模块关闭
-//参    数:
-//返 回 值:
-//说    明:
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Wifi_Model_Disable(void){
-
-  //   std_gpio_reset_pin(BLUETOOTH_DETECTION_PORT,BLUETOOTH_DETECTION_PIN);
-   
-}
-//****************************************************************//
-//函数名称: void Bsp_Back_Light_Io_Init(void)
-//函数功能: 
-//参    数:
-//返 回 值:
-//说    明:
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Back_Light_Io_Init(void){
-
-   #ifndef  _NOT_CONFIG_SWD
-    std_gpio_init_t Gpio_Init_STRUCT = {0};
-   
-   //配置开漏输出
-    Gpio_Init_STRUCT.mode = GPIO_MODE_OUTPUT;
-    Gpio_Init_STRUCT.pull = GPIO_PULLDOWN;
-    //背光
-    Gpio_Init_STRUCT.pin =  BACK_LIGHT_PIN;
-    std_gpio_init(BACK_LIGHT_PORT, &Gpio_Init_STRUCT);  
-
-    std_gpio_reset_pin(BACK_LIGHT_PORT,BACK_LIGHT_PIN);
-   #endif 
-}
-//****************************************************************//
-//函数名称: void Bsp_Back_Light_Open(void)
-//函数功能:  背光打开
-//参    数:
-//返 回 值:
-//说    明:
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Back_Light_Open(void){
-    
-    #ifndef  _NOT_CONFIG_SWD
-    std_gpio_init_t Gpio_Init_STRUCT = {0};
-   
-   //配置开漏输出
-    Gpio_Init_STRUCT.mode = GPIO_MODE_INPUT;
-    Gpio_Init_STRUCT.pull = GPIO_NOPULL;
-    //背光
-    Gpio_Init_STRUCT.pin =  BACK_LIGHT_PIN;
-    std_gpio_init(BACK_LIGHT_PORT, &Gpio_Init_STRUCT); 
-   #endif
-}
-
-//****************************************************************//
-//函数名称: void Bsp_BackLight_Close(void)
-//函数功能:  背光打关闭
-//参    数:
-//返 回 值:
-//说    明: 
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_BackLight_Close(void){
-    
-     Bsp_Back_Light_Io_Init();
-}
-//****************************************************************//
-//函数名称: void Bsp_BackLight_Close(void)
-//函数功能:  背光打关闭
-//参    数:
-//返 回 值:
-//说    明: 
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Relays_Led_Init(void){
-
- 
- #if  !defined(_NOT_CONFIG_SWD)&&!defined(NO_LED_PIN)
-    
-    std_gpio_init_t Gpio_Init_STRUCT = {0};
-   
-   //配置开漏输出
-    Gpio_Init_STRUCT.mode = GPIO_MODE_OUTPUT;
-    Gpio_Init_STRUCT.pull = GPIO_PULLDOWN;
-  #if   CHANNEL_NUMBER  == 5 
-    
-  #elif CHANNEL_NUMBER  == 4
-    
-  #elif CHANNEL_NUMBER  == 3
-    
-  #elif CHANNEL_NUMBER  == 2
-    
-  #elif CHANNEL_NUMBER  == 1
-    Gpio_Init_STRUCT.pin =  RELASY_LED_1_PIN;
-    std_gpio_init(RELASY_LED_1_PORT, &Gpio_Init_STRUCT);
-    std_gpio_reset_pin(RELASY_LED_1_PORT,RELASY_LED_1_PIN);
-  #endif
- #endif  
-}
-
-//****************************************************************//
-//函数名称: void Bsp_Relays_Channel_Init(uint8_t Channel_Count)
-//函数功能: 
+//函数名称: uint8_t Bsp_Mode_Key_Read(void)
+//函数功能: 返回模式按键状态
 //参    数: 
 //返 回 值:
 //说    明:  
 //修改记录: 2024.9.26 Whm创建函数
 //***************************************************************//
-void Bsp_Relays_Channel_Init(uint8_t Channel_Count){
+void Bsp_ChannelMode_Init(void){
 
-    std_gpio_init_t Relay_Gpio_Init = {0};
-
-    //配置成开漏输出
-    Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
-    Relay_Gpio_Init.pull = GPIO_PULLDOWN;
-    switch(Channel_Count){
-        #if CHANNEL_NUMBER >=5     
-        case 5:
-           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_5_PIN;
-           std_gpio_init(RELAYS_CHANNEL_5_PORT, &Relay_Gpio_Init);
-           Bsp_Relays_Close(RELAYS_CHANNEL_5_PORT,RELAYS_CHANNEL_5_PIN);
-        #endif
-        #if CHANNEL_NUMBER >=4    
-        case 4:
-           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_4_PIN;
-           std_gpio_init(RELAYS_CHANNEL_4_PORT, &Relay_Gpio_Init);
-           Bsp_Relays_Close(RELAYS_CHANNEL_4_PORT,RELAYS_CHANNEL_4_PIN);
-        #endif
-        #if CHANNEL_NUMBER >=3    
-        case 3:
-           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_3_PIN;
-           std_gpio_init(RELAYS_CHANNEL_3_PORT, &Relay_Gpio_Init);
-           Bsp_Relays_Close(RELAYS_CHANNEL_3_PORT,RELAYS_CHANNEL_3_PIN);
-        #endif
-        #if CHANNEL_NUMBER >=2  
-        case 2:
-           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_2_PIN;
-           std_gpio_init(RELAYS_CHANNEL_2_PORT, &Relay_Gpio_Init);
-           Bsp_Relays_Close(RELAYS_CHANNEL_2_PORT,RELAYS_CHANNEL_2_PIN);
-        default:
-        #endif
-        case 1:
-           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_1_PIN;
-           std_gpio_init(RELAYS_CHANNEL_1_PORT, &Relay_Gpio_Init);
-           Bsp_Relays_Close(RELAYS_CHANNEL_1_PORT,RELAYS_CHANNEL_1_PIN);
-        break;
-    }
+    std_gpio_init_t Gpio_Init = {0};
+   
+    /*wifi模块使能*/
+    Gpio_Init.mode = GPIO_MODE_INPUT;
+    Gpio_Init.pull = GPIO_PULLUP; 
+    Gpio_Init.pin =  MODE_PIN;
+    std_gpio_init(MODE_PORT, &Gpio_Init);
 
 }
 //****************************************************************//
-//函数名称: void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask)
-//函数功能: 
-//参    数: 
+//函数名称: Bsp_ChannelMode_Detect
+//函数功能: 通道模式监测
+//参    数:
 //返 回 值:
-//说    明:  
+//说    明:
 //修改记录: 2024.9.26 Whm创建函数
 //***************************************************************//
-void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask){
+uint8_t Bsp_ChannelMode_Detect(void){
 
-    std_gpio_init_t Relay_Gpio_Init = {0};
-    //配置成开漏输出
-    Relay_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Relay_Gpio_Init.pull = GPIO_NOPULL;
-    Relay_Gpio_Init.pin =  pin_mask; 
-    std_gpio_init(gpiox, &Relay_Gpio_Init);      
-
+    return std_gpio_get_input_pin(MODE_PORT,MODE_PIN);
 }
-//****************************************************************//
-//函数名称: void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask)
-//函数功能: 
-//参    数: 
-//返 回 值:
-//说    明:  
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask){
 
-    std_gpio_init_t Relay_Gpio_Init = {0};
-    //配置成开漏输出
-    Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
-    Relay_Gpio_Init.pull = GPIO_PULLDOWN;
-    Relay_Gpio_Init.pin =  pin_mask; 
-    std_gpio_init(gpiox, &Relay_Gpio_Init);     
-    std_gpio_reset_pin(gpiox,pin_mask);    
-
-}
 //****************************************************************//
 //函数名称: void Bsp_Gpio_Init(void)
 //函数功能: io初始化
@@ -263,87 +92,139 @@ void Bsp_Gpio_Init(void){
     //蓝牙使能初始化 
     Bsp_Wifi_Io_Init();
     //背光灯初始化 
-    Bsp_Back_Light_Io_Init();
-    //继电器提示灯初始化 
-    Bsp_Relays_Led_Init(); 
+    Bsp_Back_Light_Close();
     //继电器初始化
-    Bsp_Relays_Channel_Init(CHANNEL_NUMBER);
+    Bsp_Relays_Channel_Init(SystemInfo.ChannelCount);
      
 }
+
 //****************************************************************//
-//函数名称: Bsp_Other_Gpio_Init
-//函数功能: 其他IO口初始化
+//函数名称: void Bsp_Back_Light_Open(void)
+//函数功能:  背光打开
+//参    数:
+//返 回 值:
+//说    明:
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void Bsp_Back_Light_Open(void){
+    
+    #ifndef  _NOT_CONFIG_SWD
+    std_gpio_init_t Gpio_Init_STRUCT = {0};
+   
+   //配置开漏输出
+    Gpio_Init_STRUCT.mode = GPIO_MODE_INPUT;
+    Gpio_Init_STRUCT.pull = GPIO_NOPULL;
+    //背光
+    Gpio_Init_STRUCT.pin =  BACK_LIGHT_PIN;
+    std_gpio_init(BACK_LIGHT_PORT, &Gpio_Init_STRUCT); 
+   #endif
+}
+
+//****************************************************************//
+//函数名称: void Bsp_Back_Light_Close(void)
+//函数功能:  背光打关闭
 //参    数:
 //返 回 值:
 //说    明: 
 //修改记录: 2024.9.26 Whm创建函数
 //***************************************************************//
-void Bsp_Other_Gpio_Init(void){
-
-    std_gpio_init_t Key_Gpio_Init = {0};
-     /* 使能LED1对应的GPIO时钟 */
-    std_rcc_gpio_clk_enable(RCC_PERIPH_CLK_GPIOB|RCC_PERIPH_CLK_GPIOA|
-                            RCC_PERIPH_CLK_GPIOC|RCC_PERIPH_CLK_GPIOD|RCC_PERIPH_CLK_GPIOF);
-    Key_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Key_Gpio_Init.pull = GPIO_NOPULL;
-
-    Key_Gpio_Init.pin =  POWER_DOWN_PIN;
-    std_gpio_init(POWER_DOWN_PORT, &Key_Gpio_Init); 
-
-    Bsp_BackLight_Close(); 
+void Bsp_Back_Light_Close(void){
     
-    Bsp_Relays_Led_Close(RELASY_LED_1_PORT,RELASY_LED_1_PIN);
-    
-    Bsp_Wifi_Io_Init();
-    
-}
-
-//****************************************************************//
-//函数名称: void Bsp_Relays_Led_Open(void)
-//函数功能:  继电器LED打开
-//参    数:
-//返 回 值:
-//说    明:
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Relays_Led_Open(GPIO_t* gpiox, uint32_t pin_mask){
-    
-   #if !defined(_NOT_CONFIG_SWD) && !defined(NO_LED_PIN)
-    std_gpio_init_t Gpio_Init_STRUCT = {0};
-   
-    //配置开漏输出
-    Gpio_Init_STRUCT.mode = GPIO_MODE_INPUT;
-    Gpio_Init_STRUCT.pull = GPIO_NOPULL;
-    //背光
-    Gpio_Init_STRUCT.pin =  pin_mask;
-    std_gpio_init(gpiox, &Gpio_Init_STRUCT);
-    
-    std_gpio_reset_pin(gpiox,pin_mask);
-    #endif
-}
-//****************************************************************//
-//函数名称: void Bsp_Relays_Led_Close(void)
-//函数功能:  继电器LED关闭
-//参    数:
-//返 回 值:
-//说    明:
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void Bsp_Relays_Led_Close(GPIO_t* gpiox, uint32_t pin_mask){
-
-    #if !defined(_NOT_CONFIG_SWD) && !defined(NO_LED_PIN)
+   #ifndef  _NOT_CONFIG_SWD
     std_gpio_init_t Gpio_Init_STRUCT = {0};
    
    //配置开漏输出
     Gpio_Init_STRUCT.mode = GPIO_MODE_OUTPUT;
     Gpio_Init_STRUCT.pull = GPIO_PULLDOWN;
     //背光
-    Gpio_Init_STRUCT.pin =  pin_mask;
-    std_gpio_init(gpiox, &Gpio_Init_STRUCT);
+    Gpio_Init_STRUCT.pin =  BACK_LIGHT_PIN;
+    std_gpio_init(BACK_LIGHT_PORT, &Gpio_Init_STRUCT);  
+
+    std_gpio_reset_pin(BACK_LIGHT_PORT,BACK_LIGHT_PIN);
+   #endif 
+}
+
+//****************************************************************//
+//函数名称: void Bsp_Relays_Channel_Init(uint8_t Channel_Count)
+//函数功能: 
+//参    数: 
+//返 回 值:
+//说    明:  
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void Bsp_Relays_Channel_Init(uint8_t Channel_Count){
+
+    std_gpio_init_t Relay_Gpio_Init = {0};
+
+    //配置成开漏输出
+    Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
+    Relay_Gpio_Init.pull = GPIO_PULLDOWN;
     
-    std_gpio_reset_pin(gpiox,pin_mask);
+    switch(Channel_Count){
+
+        case 5:
+           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_5_PIN;
+           std_gpio_init(RELAYS_CHANNEL_5_PORT, &Relay_Gpio_Init);
+           Bsp_Relays_Close(RELAYS_CHANNEL_5_PORT,RELAYS_CHANNEL_5_PIN);
+
+        case 4:
+           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_4_PIN;
+           std_gpio_init(RELAYS_CHANNEL_4_PORT, &Relay_Gpio_Init);
+           Bsp_Relays_Close(RELAYS_CHANNEL_4_PORT,RELAYS_CHANNEL_4_PIN);
+        case 3:
+           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_3_PIN;
+           std_gpio_init(RELAYS_CHANNEL_3_PORT, &Relay_Gpio_Init);
+           Bsp_Relays_Close(RELAYS_CHANNEL_3_PORT,RELAYS_CHANNEL_3_PIN);
+        case 2:
+           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_2_PIN;
+           std_gpio_init(RELAYS_CHANNEL_2_PORT, &Relay_Gpio_Init);
+           Bsp_Relays_Close(RELAYS_CHANNEL_2_PORT,RELAYS_CHANNEL_2_PIN);
+        default:
+        case 1:
+           Relay_Gpio_Init.pin =  RELAYS_CHANNEL_1_PIN;
+           std_gpio_init(RELAYS_CHANNEL_1_PORT, &Relay_Gpio_Init);
+           Bsp_Relays_Close(RELAYS_CHANNEL_1_PORT,RELAYS_CHANNEL_1_PIN);
+        break;
+    }
+
+}
+//****************************************************************//
+//函数名称: void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask)
+//函数功能: 
+//参    数: 
+//返 回 值:
+//说    明:  
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask){
+
+    std_gpio_init_t Relay_Gpio_Init = {0};
+    //配置成开漏输出
+    Relay_Gpio_Init.mode = GPIO_MODE_INPUT;
+    Relay_Gpio_Init.pull = GPIO_NOPULL;
+    Relay_Gpio_Init.pin =  pin_mask; 
+    std_gpio_init(gpiox, &Relay_Gpio_Init);
     
-   #endif
+
+}
+//****************************************************************//
+//函数名称: void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask)
+//函数功能: 
+//参    数: 
+//返 回 值:
+//说    明:  
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask){
+
+    std_gpio_init_t Relay_Gpio_Init = {0};
+    //配置成开漏输出
+    Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
+    Relay_Gpio_Init.pull = GPIO_PULLDOWN;
+    Relay_Gpio_Init.pin =  pin_mask; 
+    std_gpio_init(gpiox, &Relay_Gpio_Init);     
+    std_gpio_reset_pin(gpiox,pin_mask);    
+
 }
 //****************************************************************//
 //函数名称: Bsp_Power_Down_Exit_Init
@@ -395,7 +276,6 @@ void Bsp_Power_Down_Exit_Deint(void){
 //修改记录: 2024.9.26 Whm创建函数
 //***************************************************************//
 uint8_t Bsp_Power_Down_Scan(void){
-
 
     return std_gpio_get_input_pin(POWER_DOWN_PORT,POWER_DOWN_PIN);
 }
@@ -469,6 +349,7 @@ uint8_t Bsp_Mode_Key_Read(void){
     return std_gpio_get_input_pin(KEY_MODE_PORT,KEY_MODE_PIN);
     
 }
+
 //****************************************************************//
 //函数名称: uint8_t Bsp_Key_Exit_Enable(void)
 //函数功能: 外部中断
@@ -533,3 +414,4 @@ void Bsp_Key_Exit_Disable(void){
     std_exti_deinit();
 
 }
+

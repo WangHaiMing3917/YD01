@@ -423,39 +423,47 @@ void Lcd_BackLight_Open(void){
 //***************************************************************//
 void Lcd_PowerOn_Display(void){
    
-   uint16_t Factory_Check_Cnt=1050u;
-   uint16_t Power_On_Delays=1000u; 
+   uint16_t Factory_Check_Cnt =1050u;
+   uint16_t Power_On_Delays   =1000u;
+    
+   System.wait_into_factory=0;
     
    Bsp_IWDG_ReFresh(); 
     
    if(!Bsp_Hour_Key_Read()) 
      System.wait_into_factory=1;
    
-   std_delayms(50u); 
    Lcd_Disp_All();
    //背光计时开始
    Lcd_BackLight_Open();
    
-   if(!Bsp_Hour_Key_Read()&&System.wait_into_factory)
+   if(!Bsp_Hour_Key_Read() && System.wait_into_factory)
       Factory_Check_Cnt=1000u; 
+   
    while(Power_On_Delays--){
    
-     std_delayms(1u); 
-     if(!Bsp_Hour_Key_Read()&&System.wait_into_factory){
+     std_delayms(1u);
+       
+     if(!Bsp_Hour_Key_Read() && System.wait_into_factory){
+         
        Factory_Check_Cnt--;
+         
        if(Factory_Check_Cnt>1000)
          Factory_Check_Cnt=0;  
      }
    }
    //0.5S-1S内允许进入工厂模式
    if(Factory_Check_Cnt<950u&&Factory_Check_Cnt>450u){
+       
       System_Mode_Set(Factory_Mode);
-      factory.item=factory_disp_number; 
-      factory.delays=300u;
+       
+      factory.item = factory_disp_current_channel; 
+       
+      factory.delays=1000u;
+       
    }else
       System_Mode_Set(Normal_Mode);
    
-   System.wait_into_factory=0;
    Display.update_lcd=1;
    
 
@@ -479,6 +487,11 @@ void Lcd_Factory_Disp_Version_And_Name(void){
     Lcd_Number_Disp(Version_H,Timing_Decade);
     Lcd_Number_Disp(Version_L,Timing_Unit);
     
+     char *file_name =NULL;
+    if(SystemInfo.ChannelCount ==3)
+     strcpy(file_name,ThreeChannelInfo[INFO_modle]);
+    else
+     strcpy(file_name,FiveChannelInfo[INFO_modle]);   
     //显示名称
     Lcd_ASCII_Disp(file_name[0],Hours_Decade);
     Lcd_ASCII_Disp(file_name[1],Hours_Unit);
@@ -601,6 +614,28 @@ void Lcd_Disp_Factory_Key_Press(void){
     Lcd_Disp_Wifi_state(Display.disp_wifi); 
 }
 //****************************************************************//
+//函数名称: void Lcd_Disp_Factory_Key_Press(void)
+//函数功能: 工厂按键测试
+//参    数:
+//返 回 值:
+//说    明: 
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void Lcd_Disp_Factory_Relay_Count(uint16_t value,uint8_t index){
+
+    Lcd_Number_Disp(index,Timing_Decade);
+    
+    Lcd_Number_Disp(value/100000,Hours_Decade);
+    Lcd_Number_Disp(value%100000/10000,Hours_Unit);
+    
+    Lcd_Number_Disp(value%100000%10000/1000,Minute_Decade);
+    Lcd_Number_Disp(value%100000%10000%1000/100,Minute_Unit);
+    
+    Lcd_Number_Disp(value%100000%10000%1000%100/10,Sec_Decade);
+    Lcd_Number_Disp(value%100000%10000%1000%100%10,Sec_Unit);
+
+}
+//****************************************************************//
 //函数名称: void Lcd_Disp_Channel(uint8_t channel)
 //函数功能: 显示通道号
 //参    数:
@@ -642,9 +677,9 @@ void Lcd_Disp_Current_Clock(void){
     Lcd_Number_Disp(Current.Sec%10,Sec_Unit);
 
     Lcd_Disp_Week(Current.Week);
-  #if CHANNEL_NUMBER>=2     
+   
     Lcd_Disp_Channel(Current.channel);
-  #endif 
+
     Lcd_Disp_Mode(Current.Mode);
 }
 
@@ -679,20 +714,17 @@ void Lcd_Disp_Set_Timing(uint8_t Channel_Num,uint8_t TimingIndex){
        if(!SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].enable){
             
             Lcd_Disp_Hide_Time();
-            Lcd_Disp_Week(Timing_Week_Mode_Selcet(0));  
+            Lcd_Disp_Week(WeekModeTable[0]);  
        }else {
             Lcd_Number_Disp(SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].hour/10,Hours_Decade) ;
             Lcd_Number_Disp(SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].hour%10,Hours_Unit) ;
             Lcd_Number_Disp(SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].minutes/10,Minute_Decade) ;
             Lcd_Number_Disp(SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].minutes%10,Minute_Unit) ; 
-            Lcd_Disp_Week(Timing_Week_Mode_Selcet(SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].week));
+            Lcd_Disp_Week(WeekModeTable[SystemInfo.time_channel[Channel_Num-1].timing[TimingIndex].week]);
        }
        
-
-       #if CHANNEL_NUMBER>=2
        Lcd_Number_Disp(Channel_Num,Sec_Unit); 
-       #endif
-         
+
        if(!Display.lcd_flash_flag){
          if(((TimingIndex+2)%2)==0)
            Lcd_Disp_Mode(OPEN_STATE);
@@ -808,7 +840,6 @@ void Lcd_Display(void){
              Lcd_Disp_Col();
 
             break;
-      #if  CHANNEL_NUMBER >=2
           case Select_Channel_Mode:
               
              Lcd_ASCII_Disp(ASCII_C,Hours_Decade);
@@ -818,7 +849,6 @@ void Lcd_Display(void){
              Lcd_ASCII_Disp(System.timing_channel_number,Minute_Unit);
           
             break;
-      #endif
           case Set_Current_Hours_Mode:
             Lcd_Disp_Col();
             Lcd_Disp_Set_CurrentTime(Hours_Flash);
@@ -845,11 +875,12 @@ void Lcd_Display(void){
                   case factory_disp_ver_name:
                       Lcd_Factory_Disp_Version_And_Name();
                     break;
+                  */
                   //显示当前是几路
                   case factory_disp_current_channel:
                       Lcd_Disp_Factory_Channel();
                     break;
-                  */
+                  
                   //循环显示1-8，全显后关闭
                   case factory_disp_number:
                       Lcd_Disp_Factory_Auto();
@@ -861,6 +892,9 @@ void Lcd_Display(void){
                   //按键显示1-5
                   case factory_test_key:
                       Lcd_Disp_Factory_Key_Press();
+                    break;
+                  case factory_disp_relay_count:
+                     Lcd_Disp_Factory_Relay_Count(factory.relays_count,factory.channel);
                     break;
                   default:
                     break;
