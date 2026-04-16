@@ -192,22 +192,20 @@ void SystemInfo_Restore_Check(void){
     if((std_rcc_get_reset_flag(RCC_RESET_FLAG_NRST)==1) && (std_rcc_get_reset_flag(RCC_RESET_FLAG_PMU) == 0) ){
         
        SystemInfo_Load();
+
         
-       uint8_t index =  SystemInfo.Relay_count_ctl.index_num;
+       uint32_t data[5];
         
-       uint16_t data[6][5];
-        
-       memcpy(data[0],SystemInfo.Relay_count_ctl.channel_count_index[0],30);
+       memcpy(&data[0],&SystemInfo.channel_count_index[0],sizeof(uint32_t)*5);
 
        Bsp_Erase_Page((SYSTEM_INFO_ADDRESS-0x8000000)/512u,(SYSTEM_INFO_LENGTH/512));
         
        Protocol_Cmd_Cache(CMD_RESTORE);
         
        SystemInfo_Init(); 
+ 
         
-       SystemInfo.Relay_count_ctl.index_num = index; 
-        
-       memcpy(SystemInfo.Relay_count_ctl.channel_count_index[0],data[0],30); 
+       memcpy(&SystemInfo.channel_count_index[0],&data[0],sizeof(uint32_t)*5); 
         
     }
     //清除复位标记位
@@ -224,7 +222,10 @@ void SystemInfo_Restore_Check(void){
 //***************************************************************//
 void SystemInfo_Relay_Count_Increase(uint8_t channel){
 
-      SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][channel]++;
+      SystemInfo.channel_count_index[channel]++;
+    
+      if(SystemInfo.channel_count_index[channel]>=999999u)
+         SystemInfo.channel_count_index[channel]= 999999u;
 
 }
 //****************************************************************//

@@ -347,7 +347,7 @@ void Key_Value_Process(void){
                    
                    factory.key_item=Factory_Key_Step_2;
                    Display.update_lcd=1;
-                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][1];
+                   factory.relays_count  = SystemInfo.channel_count_index[1];
                    factory.channel = 2; 
                 }
             }
@@ -395,7 +395,7 @@ void Key_Value_Process(void){
                 if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    factory.key_item=Factory_Key_Step_3;
                    Display.update_lcd=1;  
-                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][2];
+                   factory.relays_count  = SystemInfo.channel_count_index[2];
                    factory.channel = 3; 
                 }
             }
@@ -431,7 +431,7 @@ void Key_Value_Process(void){
                     
                    factory.key_item=Factory_Key_Step_4;
                    Display.update_lcd=1;
-                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][3];
+                   factory.relays_count  =  SystemInfo.channel_count_index[3];
                    factory.channel = 4; 
                 }
             }
@@ -508,7 +508,7 @@ void Key_Value_Process(void){
                 if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    factory.key_item=Factory_Key_Step_5;
                    Display.update_lcd=1;
-                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][4];
+                   factory.relays_count  =  SystemInfo.channel_count_index[4];
                    factory.channel =5;
                 }
           }
@@ -531,7 +531,7 @@ void Key_Value_Process(void){
                 if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
                    factory.key_item=Factory_Key_Step_1;
                    Display.update_lcd=1;
-                   factory.relays_count  = SystemInfo.Relay_count_ctl.channel_count_index[SystemInfo.Relay_count_ctl.index_num][0];
+                   factory.relays_count  =  SystemInfo.channel_count_index[0];
                    factory.channel =1;
                 }
             }
