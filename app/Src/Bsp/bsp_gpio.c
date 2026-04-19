@@ -31,11 +31,37 @@ void Bsp_Wifi_Io_Init(void){
 //***************************************************************//
 void Bsp_ChannelMode_Init(void){
 
+    
+    std_rcc_gpio_clk_enable(RCC_PERIPH_CLK_GPIOB|RCC_PERIPH_CLK_GPIOA|
+                            RCC_PERIPH_CLK_GPIOC|RCC_PERIPH_CLK_GPIOD|RCC_PERIPH_CLK_GPIOF);
+    
     std_gpio_init_t Gpio_Init = {0};
    
     /*wifi模块使能*/
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_PULLUP; 
+    Gpio_Init.pin =  MODE_PIN;
+    std_gpio_init(MODE_PORT, &Gpio_Init);
+
+}
+//****************************************************************//
+//函数名称: uint8_t Bsp_Mode_Key_Read(void)
+//函数功能: 返回模式按键状态
+//参    数: 
+//返 回 值:
+//说    明:  
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void Bsp_ChannelMode_DeInit(void){
+
+    std_rcc_gpio_clk_enable(RCC_PERIPH_CLK_GPIOB|RCC_PERIPH_CLK_GPIOA|
+                            RCC_PERIPH_CLK_GPIOC|RCC_PERIPH_CLK_GPIOD|RCC_PERIPH_CLK_GPIOF);
+    
+    std_gpio_init_t Gpio_Init = {0};
+   
+    /*wifi模块使能*/
+    Gpio_Init.mode = GPIO_MODE_INPUT;
+    Gpio_Init.pull = GPIO_PULLDOWN; 
     Gpio_Init.pin =  MODE_PIN;
     std_gpio_init(MODE_PORT, &Gpio_Init);
 
@@ -67,6 +93,7 @@ void Bsp_Gpio_Init(void){
     /* 使能IO時鐘*/
     std_rcc_gpio_clk_enable(RCC_PERIPH_CLK_GPIOB|RCC_PERIPH_CLK_GPIOA|
                             RCC_PERIPH_CLK_GPIOC|RCC_PERIPH_CLK_GPIOD|RCC_PERIPH_CLK_GPIOF);
+
     //掉电监测IO初始化 
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_NOPULL; 

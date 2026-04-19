@@ -188,7 +188,22 @@ void Key_Trg_Process(void){
          case KEY_MODE:
 
          break;
-       
+         case KEY_MINUTES:
+          if(System_Mode_Read()==Factory_Mode){
+                
+                if(factory.item==factory_disp_relay_count){
+                    
+                   factory.start_channel++;
+                    
+                   if( factory.start_channel>=SystemInfo.ChannelCount)
+                        factory.start_channel =0;
+                   
+                   factory.relays_count  = SystemInfo.channel_count_index[factory.start_channel];
+                   factory.channel = factory.start_channel+1;                                        
+                }
+                
+            }
+          break;
          default:
           break;
       }
@@ -332,25 +347,50 @@ void Key_Value_Process(void){
       switch(Key.Value){
     
         case KEY_MINUTES:
-            if((System_Mode_Read()==Set_Current_Hours_Mode)  || (System_Mode_Read()==Set_Current_Week_Mode)||
+           if(System_Mode_Read()==Normal_Mode){
+               
+              Display.not_disp_mode=0u;
+               
+              Current.channel++;
+               
+              if(Current.channel>SystemInfo.ChannelCount)
+                Current.channel=1;
+              
+              Current.Mode=SystemInfo.time_channel[Current.channel-1].Mode;
+              
+              Key.HoldFlag=hold_start_other;
+              
+              Key.Delays=15u;
+              
+              Lcd_Fast_Disp_Channel_Into(6u,2u);
+              
+              Display.update_lcd=1;
+              
+           } else if((System_Mode_Read()==Set_Current_Hours_Mode)  || (System_Mode_Read()==Set_Current_Week_Mode)||
                 System_Mode_Read()==Set_Current_Minutes_Mode ||  System_Mode_Read()==Set_Timing_Mode){
                     
                 if((System_Mode_Read()==Set_Current_Hours_Mode)||(System_Mode_Read()==Set_Current_Week_Mode)){
+                    
                    System_Mode_Set(Set_Current_Minutes_Mode);
+                    
                    Current.Sec=0;
+                    
                 }
                  Key_Value_Inc_Cyc(KEY_MINUTES,0);
 
-            }else if(System_Mode_Read()==Factory_Mode){
+           }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
+                if(factory.item==factory_test_key){
                    
                    factory.key_item=Factory_Key_Step_2;
                    Display.update_lcd=1;
-                   factory.relays_count  = SystemInfo.channel_count_index[1];
-                   factory.channel = 2; 
+                    
+                   Key.HoldFlag=hold_start_1000;
+              
+                   Key.Delays=15u;    
+                    
                 }
-            }
+           } 
          break;
         case KEY_TIMING:
 
@@ -392,11 +432,9 @@ void Key_Value_Process(void){
               Key.Delays=20u;    
            }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
+                if(factory.item==factory_test_key){
                    factory.key_item=Factory_Key_Step_3;
                    Display.update_lcd=1;  
-                   factory.relays_count  = SystemInfo.channel_count_index[2];
-                   factory.channel = 3; 
                 }
             }
          break;
@@ -427,17 +465,16 @@ void Key_Value_Process(void){
                 
             }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
+                if(factory.item==factory_test_key){
                     
                    factory.key_item=Factory_Key_Step_4;
                    Display.update_lcd=1;
-                   factory.relays_count  =  SystemInfo.channel_count_index[3];
-                   factory.channel = 4; 
                 }
             }
          break;
         case KEY_MODE:
           //开始计时模式
+   
           if(System_Mode_Read()==Normal_Mode){
                //通道快闪
                Key.HoldFlag=hold_start_600;
@@ -445,7 +482,7 @@ void Key_Value_Process(void){
            //    Lcd_Fast_Disp_Channel_Into(6u,3u);
                Display.update_lcd=1;
           }
-          else if(System_Mode_Read()==Select_Channel_Mode){
+        else   if(System_Mode_Read()==Select_Channel_Mode){
               
                Key.HoldFlag=hold_start_600;
                Key.Delays=12;
@@ -505,11 +542,10 @@ void Key_Value_Process(void){
                Display.update_lcd=1;
           }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
+                if(factory.item==factory_test_key){
                    factory.key_item=Factory_Key_Step_5;
                    Display.update_lcd=1;
-                   factory.relays_count  =  SystemInfo.channel_count_index[4];
-                   factory.channel =5;
+
                 }
           }
 
@@ -528,11 +564,9 @@ void Key_Value_Process(void){
                  Key_Value_Inc_Cyc(KEY_HOURS,0);
             }else if(System_Mode_Read()==Factory_Mode){
   
-                if(factory.item==factory_test_key||factory.item==factory_disp_relay_count){
+                if(factory.item==factory_test_key){
                    factory.key_item=Factory_Key_Step_1;
                    Display.update_lcd=1;
-                   factory.relays_count  =  SystemInfo.channel_count_index[0];
-                   factory.channel =1;
                 }
             }
          break;
@@ -543,16 +577,7 @@ void Key_Value_Process(void){
                Key.HoldFlag=hold_start_1000;
                Key.Delays=20;  
             
-            } else if(System_Mode_Read()==Factory_Mode){
-                
-               if(factory.item==factory_test_key){
-                   
-                  factory.item =  factory_disp_relay_count;
-                   
-                  Display.update_lcd=1; 
-               }
-            
-            }
+            } 
          break;
         default:
          break;
@@ -566,7 +591,7 @@ void Key_Value_Process(void){
       switch(Key.Value){
           
        case  KEY_MODE:
-           
+       /*    
         if(System_Mode_Read()==Normal_Mode){
             //不显示模式
            // Display.not_disp_mode=1u;
@@ -578,7 +603,7 @@ void Key_Value_Process(void){
             Key.Delays=8u;
            
             Display.update_lcd=1;
-        }
+        }      */
        break;
        default:
         break;
@@ -589,6 +614,7 @@ void Key_Value_Process(void){
 
        case  KEY_MODE:
          //通道+1，允许显示模式，通道开始闪烁
+       /*
         if(System_Mode_Read()==Normal_Mode){
             Display.not_disp_mode=0u;
             Current.channel++;
@@ -600,7 +626,26 @@ void Key_Value_Process(void){
             Lcd_Fast_Disp_Channel_Into(6u,2u);
             Display.update_lcd=1;
         }
+       */
        break;
+       case KEY_MINUTES:
+             if(System_Mode_Read()==Factory_Mode){
+                
+               if(factory.item==factory_test_key){
+                   
+                  factory.item =  factory_disp_relay_count;
+                   
+                  Display.update_lcd=1; 
+                   
+                 factory.start_channel =0;
+                   
+                 factory.relays_count  = SystemInfo.channel_count_index[factory.start_channel];
+                   
+                 factory.channel = factory.start_channel+1; 
+               }
+            
+            }
+        break;
 
       case  (KEY_HOURS+KEY_MINUTES):
            if(SystemInfo.keylocked)

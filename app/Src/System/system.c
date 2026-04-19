@@ -52,12 +52,21 @@ void System_PowerOn_Process(void){
 //***************************************************************//
 void System_ChannelNumber_Check(void){
 
-  uint8_t data = SystemInfo.ChannelCount;
+  uint8_t data = SystemInfo.ChannelCount;  
+  volatile uint16_t timer=100;
+  volatile uint8_t check_again=0;
+  Bsp_ChannelMode_Init();   
     
+  while(timer--){
+      
   if(Bsp_ChannelMode_Detect())
-    SystemInfo.ChannelCount = 3; 
+     check_again++;
+  
+  }
+  if(check_again>60)
+    SystemInfo.ChannelCount = 3;
   else
-    SystemInfo.ChannelCount = 5;
+     SystemInfo.ChannelCount =5;
   
   if(data != SystemInfo.ChannelCount){
       
@@ -65,6 +74,7 @@ void System_ChannelNumber_Check(void){
      //将数据写入Flash的第一行
 //     SystemInfo_Save();
   }
+  Bsp_ChannelMode_DeInit();
 
 }
 //****************************************************************//

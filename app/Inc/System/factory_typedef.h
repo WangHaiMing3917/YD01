@@ -15,7 +15,7 @@ typedef struct{
     uint16_t relays_count;
     
     uint8_t  channel;
-    uint8_t  idle;
+    uint8_t  start_channel;
 }FACTORY_STRUCT;
 extern FACTORY_STRUCT factory;
 

@@ -115,7 +115,7 @@ void Bsp_Back_Light_Open(void);
 
 extern void Bsp_Power_Down_Exit_Init(void);
 void Bsp_Power_Down_Exit_Deint(void);
-
+extern void Bsp_ChannelMode_DeInit(void);
 
 #pragma anon_unions
 
