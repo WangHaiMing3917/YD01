@@ -390,7 +390,15 @@ void Key_Value_Process(void){
                    Key.Delays=15u;    
                     
                 }
-           } 
+           }else if(System_Mode_Read()==Select_Channel_Mode){
+              
+               Key.HoldFlag=hold_start_600;
+               Key.Delays=12;
+               System.timing_channel_number++;
+               if(System.timing_channel_number>SystemInfo.ChannelCount)
+                  System.timing_channel_number=1; 
+               Display.update_lcd=1;
+          } 
          break;
         case KEY_TIMING:
 
@@ -482,7 +490,8 @@ void Key_Value_Process(void){
            //    Lcd_Fast_Disp_Channel_Into(6u,3u);
                Display.update_lcd=1;
           }
-        else   if(System_Mode_Read()==Select_Channel_Mode){
+          /*
+          else if(System_Mode_Read()==Select_Channel_Mode){
               
                Key.HoldFlag=hold_start_600;
                Key.Delays=12;
@@ -491,7 +500,7 @@ void Key_Value_Process(void){
                   System.timing_channel_number=1; 
                Display.update_lcd=1;
           }
-
+*/
           else if(System_Mode_Read()>Normal_Mode && System_Mode_Read()<=Set_Current_Week_Mode){  
                Display.update_lcd=1;
                Current.Sec=0u;
