@@ -353,14 +353,14 @@ void Timing_Action_Scan(void){
                     
                   Channel_Control(SystemInfo.time_channel[i].Index,RELAY_ON,change_flag);
                     
-                  if(SystemInfo.Current_Channel==i)
+                  if(SystemInfo.Current_Channel==(i+1))
                     Lcd_Channel_State_Change_Fast_Flash(6);   
                   
                 }else  if(Open_Count==0&&Close_Count>0){
                     
                   Channel_Control(SystemInfo.time_channel[i].Index,RELAY_OFF,change_flag);
                     
-                  if(SystemInfo.Current_Channel==i)  
+                  if(SystemInfo.Current_Channel==(i+1))  
                     Lcd_Channel_State_Change_Fast_Flash(6);  
                 }
               }
