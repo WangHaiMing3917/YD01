@@ -270,7 +270,7 @@ void Lcd_Disp_Mode(uint8_t mode){
 
   if( Display.relay_state_flash_flag){
       
-      if( !SystemInfo.time_channel[0].Relays_States)
+      if( !SystemInfo.time_channel[Current.channel-1].Relays_States)
          Bsp_Disp_TimingClose();
       else
          Bsp_Disp_TimingOpen();  
