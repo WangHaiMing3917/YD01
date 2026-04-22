@@ -32,7 +32,7 @@ void Into_Sleep_Mode(void){
 //***************************************************************//
 void Sleep_Process(void){
 
-   if(System.is_power_down){
+   if(System.is_power_down&&!SystemInfo.is_request_save){
        
       Is_Key_Press();
       //½øÈëË¯Ãß

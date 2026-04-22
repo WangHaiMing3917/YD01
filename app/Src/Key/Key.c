@@ -99,7 +99,7 @@ void EXTI0_1_IRQHandler(void)
              //将数据写入Flash的第一行
            // SystemInfo_Save(); 
           }  
-            Into_Sleep_Mode(); 
+           // Into_Sleep_Mode(); 
         }
        
     }
@@ -395,6 +395,7 @@ void Key_Value_Process(void){
                Key.HoldFlag=hold_start_600;
                Key.Delays=12;
                System.timing_channel_number++;
+               
                if(System.timing_channel_number>SystemInfo.ChannelCount)
                   System.timing_channel_number=1; 
                Display.update_lcd=1;
@@ -454,7 +455,7 @@ void Key_Value_Process(void){
                 Display.col_not_flash=1u;
                 Display.not_disp_mode=1u;
                 Display.update_lcd=1;
-                                
+               
                 Key.HoldFlag=hold_start_1000;
                 
                 Key.Delays=20u;  
@@ -703,30 +704,20 @@ void Key_Value_Process(void){
                }
             #else
             */
-              if(System_Mode_Read()==Set_Timing_Mode){
+              if(System_Mode_Read()==Set_Timing_Mode||System_Mode_Read()==Select_Channel_Mode){
                    
                     Key.HoldFlag=hold_start_3000;
                     Key.Delays=60u;
                     System_Mode_Set(Normal_Mode);
                     Display.col_not_flash=0u;
                     Display.update_lcd=1;  
+                    Current.channel =System.timing_channel_number;
                     //通道定时更改扫描，
                     Check_Near_CurrentTime_Arrary((TIMING_INFO*)&SystemInfo.time_channel[System.timing_channel_number-1]);
-                    Current.channel =System.timing_channel_number;
-
-               }else if(System_Mode_Read()==Select_Channel_Mode){
-               
-                    Key.HoldFlag=hold_start_3000;
-                    Key.Delays=60u;
-                    System_Mode_Set(Normal_Mode);
-                    Display.col_not_flash=0u;
-                    Display.update_lcd=1;  
-                    Current.channel =System.timing_channel_number;
+          
 
                }
-              /*
-            #endif
-               */
+  
               break;
          }             
     

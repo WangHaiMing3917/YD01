@@ -17,7 +17,7 @@
 //对应app_软件版本
 #define DEVICE_VERSION             1u
 
-#define MCU_VERSION                4u
+#define MCU_VERSION                5u
 //编译时间
 #define AP_DATE                    {'2','0','2','6','0','4','2','0'}
 
