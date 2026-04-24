@@ -181,8 +181,7 @@ void Key_Trg_Process(void){
        
       Lcd_BackLight_Open();
       
-      if(Key_is_Locked())
-       return;
+      
       switch(Key.Trg){
           
          case KEY_MODE:
@@ -797,6 +796,7 @@ void Key_Value_Process(void){
 void Key_Release_Process(void){
 
     if(Key.Release){
+        
        Key. release_delays=1;
         switch(Key.Release){
         
@@ -857,15 +857,17 @@ void Key_Release_Process(void){
 uint8_t  Key_is_Locked(void){
 
     if(SystemInfo.keylocked){
-    
-        if(Key.Value!=(KEY_HOURS+KEY_MINUTES)&&(Key.Value!=0)){
-
-           Key.Release=0;
+        
+        if( Key.Value!=(KEY_HOURS+KEY_MINUTES) && (Key.Value!=0)){
+           Key.Release=0; 
            Key.Trg=0;
            Key.Value=0;
            lcd_disp_flash(3); 
+
            return 1;
         }
+        if(!Key.Value)
+          return 1;
     }
        return 0;
 
@@ -881,6 +883,8 @@ uint8_t  Key_is_Locked(void){
 //***************************************************************//
 void Key_Process(void){
 
+   if(Key_is_Locked())
+      return;
     Key_Trg_Process();
     
     Key_Value_Process();
