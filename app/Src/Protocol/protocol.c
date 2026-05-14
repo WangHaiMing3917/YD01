@@ -497,15 +497,15 @@ uint8_t Protocol_Switch_Piid_Mode_Check(char* temp){
 uint8_t Protocol_Custom_Timer_Group_Number_Check(char* temp){
 
     if(strncmp(temp,ProtocolInfo[SIID_CUSTOM]+1,1)==0||strncmp(temp,ProtocolInfo[SIID_CUSTOM]+2,1)==0)
-       return 1;
+       return 0;
     if(strncmp(temp,ProtocolInfo[SIID_CUSTOM]+3,1)==0||strncmp(temp,ProtocolInfo[SIID_CUSTOM]+4,1)==0)
-       return 2;
+       return 1;
     if(strncmp(temp,ProtocolInfo[SIID_CUSTOM]+5,1)==0||strncmp(temp,ProtocolInfo[SIID_CUSTOM]+6,1)==0)
-       return 3;
+       return 2;
     if(strncmp(temp,ProtocolInfo[SIID_CUSTOM]+7,1)==0||strncmp(temp,ProtocolInfo[SIID_CUSTOM]+8,1)==0)
-       return 4;
+       return 3;
     if(strncmp(temp,ProtocolInfo[SIID_CUSTOM]+9,1)==0||strncmp(temp,ProtocolInfo[SIID_CUSTOM]+10,2)==0)
-       return 5;
+       return 4;
     return 0;
 }
 //****************************************************************//
@@ -1655,7 +1655,7 @@ void Protocol_Change_Mode(uint8_t mode,uint8_t channel){
           break;
     
     }
-    System.Properties_Change|=(Mode_Change<<channel*5); 
+    System.Properties_Change|=(Mode_Change<<(channel*5)); 
 }
 //****************************************************************//
 //º¯ÊýÃû³Æ: void Protocol_TimingGroup_Set(char *temp)
