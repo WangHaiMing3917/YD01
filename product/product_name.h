@@ -5,6 +5,6 @@
 
 //#define _NOT_CONFIG_SWD
 
-//#define  _DUBUG__
+//#define _DUBUG__
 
 #endif

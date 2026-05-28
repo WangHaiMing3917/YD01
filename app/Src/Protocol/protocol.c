@@ -1793,15 +1793,17 @@ uint8_t Protcol_Properties_Changed_Check(uint32_t properties ){
 void Protocol_Send_Properties_Changed(void){
     
     
-      uint8_t ch = System.receive_channel;
-    
-      TIMING_INFO *chan = &SystemInfo.time_channel[ch];
     
       Searil.length=strlen(Cmd_Table[INDEX_CMD_PROPERTIES_CHANGED])*sizeof(char);
     
       strcpy(Searil.TxBuf,Cmd_Table[INDEX_CMD_PROPERTIES_CHANGED]);
     
-      uint8_t Need_Report_Pro = Protcol_Properties_Changed_Check(System.Properties_Change);
+      volatile uint8_t Need_Report_Pro = Protcol_Properties_Changed_Check(System.Properties_Change);
+    
+      uint8_t ch = System.receive_channel;
+    
+      TIMING_INFO *chan = &SystemInfo.time_channel[ch];
+    
        //===================== 开关状态变化 =====================
       if(Switch_Change & Need_Report_Pro){
           
