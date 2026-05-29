@@ -273,7 +273,7 @@ void Check_Near_CurrentTime_Arrary(TIMING_INFO *Ch){
    // 无定时强制关闭
    if(Group_Enable_Cache == 0){
        
-    if(Current.Mode == AUTO_STATE){
+    if(Ch->Mode == AUTO_STATE){
         
         if(SystemInfo.time_channel[Ch->Index].Relays_States)
            Channel_Control(Ch->Index, RELAY_OFF, change_flag);
