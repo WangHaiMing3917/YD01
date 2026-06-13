@@ -846,7 +846,8 @@ void Protocol_Get_Properties_Process(uint8_t count){
                uint8_t en2  = t_chan->timing[2*i+1].enable;
                uint8_t h2   = t_chan->timing[2*i+1].hour;
                uint8_t m2   = t_chan->timing[2*i+1].minutes;
-
+               uint8_t t1_close = t_chan->timing[2*i].close;
+               uint8_t t2_close = t_chan->timing[2*i+1].close; 
                Tx_Fill_Char(System_Number_To_ASSIIC(((en1<<7u)|(disp_none1<<6u)|h1) >> 4u));
                  
                Tx_Fill_Char(System_Number_To_ASSIIC(((en1<<7u)|h1) & 0x0F));
@@ -855,7 +856,7 @@ void Protocol_Get_Properties_Process(uint8_t count){
                  
                Tx_Fill_Char(System_Number_To_ASSIIC(m1 & 0x0F));
 
-               if (!en1 && !h1 && !m1 && !en2 && !h2 && !m2) {
+               if (!en1 && !h1 && !m1 && !en2 && !h2 && !m2&&t1_close&&t2_close) {
                    
                  Tx_Fill_Char('f');
                    
