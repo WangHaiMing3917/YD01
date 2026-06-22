@@ -1,7 +1,41 @@
 #include "system.h"
 
-   uint16_t a;
+typedef struct{
 
+   uint8_t  flag[16];
+   uint32_t relays_count[5];
+
+} NotClearCount_t;
+
+ NotClearCount_t NotClearCount __attribute__((at(0x20001F00)));
+
+
+void SystemInfo_RealaCount_Init(void){
+
+
+    for (uint8_t i = 0;i<16;i++) {
+    
+    
+       NotClearCount.flag[i] = i;
+    
+    }
+
+   for(uint8_t i = 0;i<5;i++)
+     NotClearCount.relays_count[i]=SystemInfo.channel_count_index[i];
+   
+
+}
+
+void SystemInfo_Relays_Count_Check(void){
+    
+    for(uint8_t i = 0;i<16;i++){
+    
+      if(NotClearCount.flag[i]!=i)
+        return ;
+    }
+   for(uint8_t i = 0;i<5;i++)
+    SystemInfo.channel_count_index[i]= NotClearCount.relays_count[i];
+}
 //****************************************************************//
 //函数名称: SystemInfo_IsInitialized
 //函数功能: 系统 信息 是否已初始化
@@ -223,10 +257,10 @@ void SystemInfo_Restore_Check(void){
 void SystemInfo_Relay_Count_Increase(uint8_t channel){
 
       SystemInfo.channel_count_index[channel]++;
-    
+     
       if(SystemInfo.channel_count_index[channel]>=999999u)
          SystemInfo.channel_count_index[channel]= 999999u;
-
+       SystemInfo_RealaCount_Init();
 }
 //****************************************************************//
 //函数名称: void SystemInfo_Memory_Init(void)
@@ -252,7 +286,7 @@ void SystemInfo_Memory_Init(void){
         //复位脚复位
     SystemInfo_Restore_Check();
 
-
+    SystemInfo_Relays_Count_Check();
 
 }
 

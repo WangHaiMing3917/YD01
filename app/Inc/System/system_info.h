@@ -43,7 +43,7 @@ extern void SystemInfo_Init(void);
  
 extern void SystemInfo_Relay_Count_Increase(uint8_t channel);
 
-
+extern void SystemInfo_Timing_Init(void) ;
 
 
 #endif

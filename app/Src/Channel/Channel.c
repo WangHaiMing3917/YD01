@@ -28,7 +28,8 @@ void Channel_Control(uint8_t index,uint8_t state,uint8_t flag){
 
         Bsp_Relays_Open(RELAYS_INDEX[index].port_t,RELAYS_INDEX[index].pin);
         
-        SystemInfo_Relay_Count_Increase(index);
+       if(!System.is_power_down)
+         SystemInfo_Relay_Count_Increase(index);
         
        if(flag)
          SystemInfo.time_channel[index].Relays_States=1u;
@@ -64,8 +65,10 @@ void Channel_ALL_OFF(void){
 //***************************************************************//
 void Channel_ALL_ON(void){
 
-     for(uint8_t i=0;i<SystemInfo.ChannelCount;i++)
+     for(uint8_t i=0;i<SystemInfo.ChannelCount;i++){
+      if(!SystemInfo.time_channel[i].Relays_States)  
        Channel_Control(i,RELAY_ON,change_flag);
+     }
 }
 //****************************************************************//
 //º¯ÊýÃû³Æ: void Channel_Mode_Changed(void)

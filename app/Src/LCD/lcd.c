@@ -595,6 +595,7 @@ void Lcd_Disp_Factory_Key_Press(void){
        case Factory_Key_Step_1:
 
           Lcd_Number_Disp(1,Hours_Unit);
+          
           break;
        case Factory_Key_Step_2:
           Lcd_Number_Disp(2,Hours_Unit);

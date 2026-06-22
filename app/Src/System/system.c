@@ -70,6 +70,7 @@ void System_ChannelNumber_Check(void){
   
   if(data != SystemInfo.ChannelCount){
       
+     SystemInfo_Timing_Init();
      SystemInfo.is_request_save = 1u;
      //将数据写入Flash的第一行
 //     SystemInfo_Save();
@@ -773,13 +774,15 @@ void Power_Down_Process(void){
 void Power_Down_Restore(void){
 
    //掉电情况下,继电器是打开的,则关闭，但是不改变标志位
+  System.is_power_down=0;
+    
   for(uint8_t i=0;i<SystemInfo.ChannelCount;i++){
   
       if(SystemInfo.time_channel[i].Relays_States)
         Channel_Control(i,RELAY_ON,without_change_flag);
 
   }
-   System.is_power_down=0;
+
 
 }
 //****************************************************************//

@@ -1,5 +1,14 @@
 #include "system.h"
 #include <string.h>
+typedef struct{
+
+   uint8_t  flag[16];
+   uint32_t relays_count[5];
+
+} NotClearCount_t;
+
+ NotClearCount_t NotClearCount __attribute__((at(0x02001F00)));
+
 //****************************************************************//
 //函数名称: SystemInfo_IsInitialized
 //函数功能: 系统 信息 是否已初始化

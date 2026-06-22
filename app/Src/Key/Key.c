@@ -185,7 +185,20 @@ void Key_Trg_Process(void){
       switch(Key.Trg){
           
          case KEY_MODE:
-
+             
+          if(System_Mode_Read()==Factory_Mode){
+              
+                 if(factory.item==factory_test_key){
+                     
+                   if(SystemInfo.ChannelCount>3){
+                       
+                     if(!SystemInfo.time_channel[4].Relays_States)
+                      Channel_Control(4,RELAY_ON, change_flag);
+                     else
+                      Channel_Control(4,RELAY_OFF, change_flag);
+                   } 
+                 }
+          }
          break;
          case KEY_MINUTES:
           if(System_Mode_Read()==Factory_Mode){
@@ -198,11 +211,58 @@ void Key_Trg_Process(void){
                         factory.start_channel =0;
                    
                    factory.relays_count  = SystemInfo.channel_count_index[factory.start_channel];
-                   factory.channel = factory.start_channel+1;                                        
-                }
+                   factory.channel = factory.start_channel+1;
+                   
+                }else if(factory.item==factory_test_key){
+                    
+                   if(!SystemInfo.time_channel[1].Relays_States)
+                      Channel_Control(1,RELAY_ON, change_flag);
+                   else
+                      Channel_Control(1,RELAY_OFF, change_flag);
+               }
                 
             }
           break;
+         case KEY_HOURS:
+             if(System_Mode_Read()==Factory_Mode){ 
+                 
+               if(factory.item==factory_test_key){
+                    
+                   if(!SystemInfo.time_channel[0].Relays_States)
+                      Channel_Control(0,RELAY_ON, change_flag);
+                   else
+                      Channel_Control(0,RELAY_OFF, change_flag);
+                   
+                }
+             }
+          break;
+         case KEY_TIMING:
+             if(System_Mode_Read()==Factory_Mode){   
+                 
+                 if(factory.item==factory_test_key){
+                     
+                   if(!SystemInfo.time_channel[2].Relays_States)
+                      Channel_Control(2,RELAY_ON, change_flag);
+                   else
+                      Channel_Control(2,RELAY_OFF, change_flag);  
+                 }
+             }
+          break;
+         case KEY_WEEKS:
+             if(System_Mode_Read()==Factory_Mode){
+                 
+                 if(factory.item==factory_test_key){
+                     
+                     if(SystemInfo.ChannelCount>3){
+                       
+                     if(!SystemInfo.time_channel[3].Relays_States)
+                      Channel_Control(3,RELAY_ON, change_flag);
+                     else
+                      Channel_Control(3,RELAY_OFF, change_flag);
+                   }  
+                 }
+             }
+           break;
          default:
           break;
       }
@@ -339,7 +399,7 @@ void Key_Value_Process(void){
       
     Lcd_BackLight_Open();
       
-    if(System_Mode_Read()>Normal_Mode && System_Mode_Read()<Factory_Mode)
+    if((System_Mode_Read() > Normal_Mode) && (System_Mode_Read()<Factory_Mode))
       System_TimeOut_Set(20u);
     if(Key.HoldFlag==hold_0){
         
@@ -382,6 +442,7 @@ void Key_Value_Process(void){
                 if(factory.item==factory_test_key){
                    
                    factory.key_item=Factory_Key_Step_2;
+
                    Display.update_lcd=1;
                     
                    Key.HoldFlag=hold_start_1000;
@@ -441,6 +502,7 @@ void Key_Value_Process(void){
            }else if(System_Mode_Read()==Factory_Mode){
   
                 if(factory.item==factory_test_key){
+                    
                    factory.key_item=Factory_Key_Step_3;
                    Display.update_lcd=1;  
                 }
@@ -476,6 +538,7 @@ void Key_Value_Process(void){
                 if(factory.item==factory_test_key){
                     
                    factory.key_item=Factory_Key_Step_4;
+                    
                    Display.update_lcd=1;
                 }
             }
@@ -552,8 +615,11 @@ void Key_Value_Process(void){
           }else if(System_Mode_Read()==Factory_Mode){
   
                 if(factory.item==factory_test_key){
+                    
                    factory.key_item=Factory_Key_Step_5;
+                    
                    Display.update_lcd=1;
+                    
 
                 }
           }
@@ -568,13 +634,17 @@ void Key_Value_Process(void){
                   Current.Sec=0;
 
                 
-            }else if(System_Mode_Read()==Set_Current_Hours_Mode||System_Mode_Read()==Set_Timing_Mode){
+            }else if(System_Mode_Read()==Set_Current_Hours_Mode||System_Mode_Read()==Set_Timing_Mode)
                 
                  Key_Value_Inc_Cyc(KEY_HOURS,0);
-            }else if(System_Mode_Read()==Factory_Mode){
+                
+            else if(System_Mode_Read()==Factory_Mode){
   
                 if(factory.item==factory_test_key){
+                    
                    factory.key_item=Factory_Key_Step_1;
+                    
+                   
                    Display.update_lcd=1;
                 }
             }
@@ -651,6 +721,8 @@ void Key_Value_Process(void){
                  factory.relays_count  = SystemInfo.channel_count_index[factory.start_channel];
                    
                  factory.channel = factory.start_channel+1; 
+                   
+                 Channel_Control(1,RELAY_OFF, change_flag);
                }
             
             }
@@ -863,7 +935,7 @@ uint8_t  Key_is_Locked(void){
            Key.Trg=0;
            Key.Value=0;
            lcd_disp_flash(3); 
-
+           Lcd_BackLight_Open();
            return 1;
         }
         if(!Key.Value)
