@@ -185,9 +185,9 @@ void System_Factory_Disp_Timer(void){
                   factory.delays=300u;
               else
                   factory.delays=1000u;
-              if(factory.item==factory_test_key){
-                  Channel_ALL_OFF();
-              } 
+            //  if(factory.item==factory_test_key){
+            //      Channel_ALL_OFF();
+           //   } 
             }else{
                 
               if(factory.disp_item<Factory_Auto_disp_Step_All){

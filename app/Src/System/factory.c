@@ -80,7 +80,7 @@ void Factory_Check_Net_Timer(void){
 void Factory_Relay_Test(void){
 
    Bsp_Clear_Lcd_Ram_Arrary();
-   Channel_ALL_ON();
+ //  Channel_ALL_ON();
 }
 //****************************************************************//
 //º¯ÊýÃû³Æ: Factory_Key_Release_ConnectWifi(void)
