@@ -99,6 +99,7 @@ typedef struct {
 #define P_CMD_OK               8
 #define P_CMD_LOCAL            9
 #define P_CMD_ERROR            10
+#define P_CMD_CLOUD            11
 
 // 查找表
 const CmdItem CmdTable[] = {
@@ -112,6 +113,7 @@ const CmdItem CmdTable[] = {
     {"ok",                   2, P_CMD_OK},
     {"local",                5, P_CMD_LOCAL},
     {"error",                5, P_CMD_ERROR},
+    {"cloud",                5, P_CMD_CLOUD},
 };
 
 #define CMD_COUNT (sizeof(CmdTable)/sizeof(CmdItem))
@@ -1158,7 +1160,9 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
               
                break;
               case P_CMD_DOWN_NET_CHANGE:
+                  
                  temp = strtok(NULL, " ");
+              
                  if (temp == NULL) break;
 
                  if (strncmp(temp, "offline", 7) == 0 ||
@@ -1166,18 +1170,25 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
                      strncmp(temp, "uap", 3) == 0 ||
                      strncmp(temp, "updating", 8) == 0){
                          
-                   if (strncmp(temp, "updating", 8) != 0)
-                     Display.disp_wifi = 0;
-                   
+                   if (strncmp(temp, "updating", 8) != 0){
+                 
+                       Display.disp_wifi = 0;
+                       System.wait_get_net_delays = 3000;
+                       System.is_need_check_net   =  1;
+                   }
                  }else if (strncmp(temp, "cloud", 5) == 0) {
-                     
-                   Display.disp_wifi = 1;
-                   System_Disable_Send_Get_Down();
-                   System.is_power_on_send_changed = 1;
-                   System.Properties_Change = ALL_Change;
-                   //   Protocol_Send_Debug_0();
+                  
+                  if(!Display.disp_wifi){
+                    Display.disp_wifi = 1;
+                    System_Disable_Send_Get_Down();
+                    System.is_power_on_send_changed = 1;
+                    System.Properties_Change = ALL_Change;
+                    System.is_need_check_net = 0;  
+                  }
+  
                  }
               break;
+                 
               case P_CMD_DOWN_MCU_VER:
                  Protocol_Cmd_Cache(CMD_MCU_VER);
                break;
@@ -1261,7 +1272,7 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
                             SystemInfo.wifi_in_factory = 0;
                             
                             SystemInfo.is_request_save = 1;
-                            //SystemInfo_Save();  
+
                             
                         }
                         System.Model_Interactive_Step = Send_Model;
@@ -1274,7 +1285,7 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
                       SystemInfo.system_state = normal;
                   
                       SystemInfo.is_request_save = 1;
-                      //SystemInfo_Save();  
+ 
                       System_Enable_Send_Get_Down();
                   
                     break;
@@ -1299,6 +1310,18 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
                     
                 }
                           
+               break;
+             case P_CMD_CLOUD:
+                 
+                  if(!Display.disp_wifi){
+                      
+                    Display.disp_wifi = 1;
+                      
+                    System_Disable_Send_Get_Down();
+                    System.is_power_on_send_changed = 1;
+                    System.Properties_Change = ALL_Change;
+                    System.is_need_check_net = 0;  
+                  }
                break;
              case P_CMD_ERROR:
                  
@@ -1539,8 +1562,6 @@ void Protocol_Msg_Send(void){
                  SystemInfo.system_state=update_into;
   
                  Bsp_Erase_Page((UPDATE_ADDRESS-0x08000000)/512u,(0x08010000-UPDATE_ADDRESS)/512);
-                 SystemInfo.is_request_save=1;
-//                 SystemInfo_Save();
                  SystemInfo.update_count++;  
                  Protocol_Cmd_Clear();
                  Send_C_Check_Xmodem_Mode();
@@ -1933,13 +1954,14 @@ void Protocol_Send_Properties_Changed(void){
       
       Searil.Tx_State=Tx_Request;
 
-     if(System.is_power_on_send_changed&&!System.Properties_Change){
+     if(System.is_power_on_send_changed && !System.Properties_Change){
          
          System.is_power_on_send_changed=0;
          
          Protocol_Cmd_Cache(CMD_TIME);
          
      }
+
 }
 //****************************************************************//
 //函数名称: void Protocol_Properties_Changed_Fill(void)

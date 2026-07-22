@@ -185,9 +185,6 @@ void System_Factory_Disp_Timer(void){
                   factory.delays=300u;
               else
                   factory.delays=1000u;
-            //  if(factory.item==factory_test_key){
-            //      Channel_ALL_OFF();
-           //   } 
             }else{
                 
               if(factory.disp_item<Factory_Auto_disp_Step_All){
@@ -259,6 +256,18 @@ void System_1ms_Timer(void){
       }
    }  
        Factory_Check_Net_Timer(); 
+   
+   
+       
+   if(System.is_need_check_net && !Display.disp_wifi && !SystemInfo.wifi_in_factory){
+    
+      if(--System.wait_get_net_delays == 0){
+      
+          Protocol_Cmd_Cache(CMD_GET_NET);
+          System.wait_get_net_delays = 3000;
+      }
+   }
+      
 }
 //****************************************************************//
 //º¯ÊýÃû³Æ: void System_Wifi_Connect_Init(void)

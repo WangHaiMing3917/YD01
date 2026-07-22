@@ -54,7 +54,7 @@ void Factory_Cyc_Check_Net(void){
 //***************************************************************//
 void Factory_Check_Net_Timer(void){
 
-    if(!Display.disp_wifi&&SystemInfo.wifi_in_factory){
+    if(!Display.disp_wifi && SystemInfo.wifi_in_factory){
     
         if(factory.factory_check_net_delays){
         

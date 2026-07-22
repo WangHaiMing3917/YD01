@@ -42,7 +42,9 @@ typedef struct{
     uint8_t is_not_allow_send_changed        :1u;
     
     uint8_t is_power_on_send_changed         :1u;
-    uint8_t is_idle                          :3u;
+    
+    uint8_t is_need_check_net                :1u;
+    uint8_t is_idle                          :2u;
     uint8_t mode;                                  //系统当前模式
     //1
   //  uint8_t channel;                               //当前通道
@@ -76,7 +78,8 @@ typedef struct{
     uint16_t power_on_send_properties_delays;
 
     uint32_t Properties_Change;                     //属性更改
-
+    uint16_t wait_get_net_delays;
+    uint16_t idle3;
 }SYSTEM_STRUCT;
 extern SYSTEM_STRUCT System;
 
