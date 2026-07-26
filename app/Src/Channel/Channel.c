@@ -24,6 +24,8 @@ RELAY_STRUCT RELAYS_INDEX[5]={
 //***************************************************************//
 void Channel_Control(uint8_t index,uint8_t state,uint8_t flag){
 
+    uint8_t state_flag =    SystemInfo.time_channel[index].Relays_States;
+    
     if(state){
 
         Bsp_Relays_Open(RELAYS_INDEX[index].port_t,RELAYS_INDEX[index].pin);
@@ -38,6 +40,7 @@ void Channel_Control(uint8_t index,uint8_t state,uint8_t flag){
       if(flag)
         SystemInfo.time_channel[index].Relays_States=0u;
     }
+    if(state_flag!=SystemInfo.time_channel[index].Relays_States) 
     System_Properties_Change_Cal(index,Switch_Change); 
 }
 

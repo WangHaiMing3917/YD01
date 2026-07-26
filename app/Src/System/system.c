@@ -841,11 +841,8 @@ void PowerDown_FroceSaveInfo(void){
    if(System.is_power_down){
         
        uint16_t crc16= Crc16_Cal((uint8_t *)&SystemInfo.time_channel,845u);
-       if( SystemInfo.crc16!=crc16) {
+       if( SystemInfo.crc16!=crc16) 
          SystemInfo.is_request_save=1u;
-         //将数据写入Flash的第一行
-//         SystemInfo_Save(); 
-       }
     }
 
 }
