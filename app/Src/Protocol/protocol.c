@@ -555,7 +555,21 @@ uint8_t Protocol_Timer_Group_Set_Piid_Check(char* temp) {
     return 0;
 }
 
-
+//****************************************************************//
+//函数名称: uint8_t Protocol_Timer_Group_Number_Check(char* temp) 
+//函数功能: 定时组 设置piid
+//参    数: 
+//返 回 值: 
+//说    明：
+//修改记录: 2023.6.13 
+//***************************************************************//
+uint8_t Protocol_Timer_Group_Number_Check(char* temp) {
+    
+      if(strncmp(temp,ProtocolInfo[SIID_CUSTOM]+12,2)==0)
+       return 1;
+    return 0;
+    
+}
 
 //****************************************************************//
 //函数名称: void Protocol_Cal_GroupNumber(void)
@@ -881,7 +895,15 @@ void Protocol_Get_Properties_Process(uint8_t count){
                Tx_Fill_Char(System_Number_To_ASSIIC(m2 & 0x0F));
              }
              Tx_Fill_Char(CHAR_QUOTE);
-           }else
+           }else if(Protocol_Timer_Group_Number_Check(temp)){
+               
+              Tx_Fill_Success();
+
+              Tx_Fill_Char(SystemInfo.ChannelCount + 0x30);
+               
+              Tx_Fill_Char(CHAR_SPACE);
+           }
+           else
              Searil.length -= 8;
         }
         

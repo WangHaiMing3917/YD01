@@ -12,7 +12,9 @@
 #define  Channel1_Changed    (uint32_t)(Mode_Change|Switch_Change|Group_Change|Group_Time_Change|Lock_Change)
 #define  Channel2_Changed    (uint32_t)((Mode_Change|Switch_Change|Group_Change|Group_Time_Change)<<5)
 #define  Channel3_Changed    (uint32_t)((Mode_Change|Switch_Change|Group_Change|Group_Time_Change)<<10)
-#define  ALL_Change          (Channel3_Changed|Channel1_Changed|Channel2_Changed)
+#define  Channel4_Changed    (uint32_t)((Mode_Change|Switch_Change|Group_Change|Group_Time_Change)<<15)
+#define  Channel5_Changed    (uint32_t)((Mode_Change|Switch_Change|Group_Change|Group_Time_Change)<<20)
+#define  ALL_Change          (Channel3_Changed|Channel1_Changed|Channel2_Changed|Channel4_Changed|Channel5_Changed)
 
 typedef struct{
     //0

@@ -94,7 +94,25 @@ void Bsp_Gpio_Init(void){
     std_rcc_gpio_clk_enable(RCC_PERIPH_CLK_GPIOB|RCC_PERIPH_CLK_GPIOA|
                             RCC_PERIPH_CLK_GPIOC|RCC_PERIPH_CLK_GPIOD|RCC_PERIPH_CLK_GPIOF);
 
-    //掉电监测IO初始化 
+   
+    Gpio_Init.mode = GPIO_MODE_OUTPUT;
+    Gpio_Init.pull = GPIO_NOPULL; 
+    Gpio_Init.output_type =  GPIO_OUTPUT_PUSHPULL;
+    Gpio_Init.pin =  GPIO_PIN_6|GPIO_PIN_7;
+    std_gpio_init(GPIOA, &Gpio_Init);
+   
+    Gpio_Init.pin =  GPIO_PIN_10;
+    std_gpio_init(GPIOB, &Gpio_Init);
+    Gpio_Init.pin =  GPIO_PIN_7|GPIO_PIN_12|GPIO_PIN_13;
+    std_gpio_init(GPIOC, &Gpio_Init);
+    Gpio_Init.pin =  GPIO_PIN_2;
+    std_gpio_init(GPIOD, &Gpio_Init);
+    std_gpio_reset_pin(GPIOD,GPIO_PIN_2); 
+    std_gpio_reset_pin(GPIOC,GPIO_PIN_7|GPIO_PIN_12|GPIO_PIN_13); 
+    std_gpio_reset_pin(GPIOB,GPIO_PIN_10); 
+    std_gpio_reset_pin(GPIOA,GPIO_PIN_6|GPIO_PIN_7); 
+
+     //掉电监测IO初始化 
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_NOPULL; 
     Gpio_Init.pin =  POWER_DOWN_PIN;
@@ -185,8 +203,8 @@ void Bsp_Relays_Channel_Init(uint8_t Channel_Count){
 
     //配置成开漏输出
     Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
-    Relay_Gpio_Init.pull = GPIO_PULLDOWN;
-    
+    Relay_Gpio_Init.pull = GPIO_NOPULL;
+    Relay_Gpio_Init.output_type = GPIO_OUTPUT_PUSHPULL;
     switch(Channel_Count){
 
         case 5:
@@ -227,11 +245,11 @@ void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask){
 
     std_gpio_init_t Relay_Gpio_Init = {0};
     //配置成开漏输出
-    Relay_Gpio_Init.mode = GPIO_MODE_INPUT;
     Relay_Gpio_Init.pull = GPIO_NOPULL;
+    Relay_Gpio_Init.output_type=  GPIO_OUTPUT_PUSHPULL;
     Relay_Gpio_Init.pin =  pin_mask; 
     std_gpio_init(gpiox, &Relay_Gpio_Init);
-    
+    std_gpio_set_pin(gpiox,pin_mask);
 
 }
 //****************************************************************//
@@ -247,7 +265,8 @@ void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask){
     std_gpio_init_t Relay_Gpio_Init = {0};
     //配置成开漏输出
     Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
-    Relay_Gpio_Init.pull = GPIO_PULLDOWN;
+    Relay_Gpio_Init.pull = GPIO_NOPULL;
+    Relay_Gpio_Init.output_type=  GPIO_OUTPUT_PUSHPULL;
     Relay_Gpio_Init.pin =  pin_mask; 
     std_gpio_init(gpiox, &Relay_Gpio_Init);     
     std_gpio_reset_pin(gpiox,pin_mask);    
