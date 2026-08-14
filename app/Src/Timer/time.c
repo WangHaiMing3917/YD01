@@ -431,7 +431,7 @@ void Time_1ms_poll(void){
     if(System.power_on_send_properties_delays){
     
         if(--System.power_on_send_properties_delays==0)
-            System.Properties_Change=ALL_Change;
+            System.Properties_Change=All_Properties_Read();
     }
 
 }

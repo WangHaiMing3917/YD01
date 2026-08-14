@@ -19,7 +19,7 @@
 
 #define MCU_VERSION                15u
 //±‡“Î ±º‰
-#define AP_DATE                    {'2','0','2','6','0','8','1','2'}
+#define AP_DATE                    {'2','0','2','6','0','8','1','4'}
 
 
 //LCD_SEGΩ≈≈‰÷√

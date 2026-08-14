@@ -117,7 +117,24 @@ const CmdItem CmdTable[] = {
 };
 
 #define CMD_COUNT (sizeof(CmdTable)/sizeof(CmdItem))
+//****************************************************************//
+//函数名称: static inline void Tx_Fill_Str(const char *str)
+//函数功能: 填充单个字符串到TxBuf
+//参    数:
+//返 回 值:
+//说    明: 
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+uint32_t All_Properties_Read(void){
+
+     uint32_t properties; 
+     if(SystemInfo.ChannelCount==5)
+       properties =  (Channel3_Changed|Channel1_Changed|Channel2_Changed|Channel4_Changed|Channel5_Changed);
+     else
+       properties =  (Channel3_Changed|Channel1_Changed|Channel2_Changed);
     
+    return    properties ;
+}
 //****************************************************************//
 //函数名称: static inline void Tx_Fill_Str(const char *str)
 //函数功能: 填充单个字符串到TxBuf
@@ -1204,7 +1221,7 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
                     Display.disp_wifi = 1;
                     System_Disable_Send_Get_Down();
                     System.is_power_on_send_changed = 1;
-                    System.Properties_Change = ALL_Change;
+                    System.Properties_Change = All_Properties_Read();
                     System.is_need_check_net = 0;  
                   }
   
@@ -1341,7 +1358,7 @@ void Protocol_Receive_Process(char *data,uint16_t Length){
                       
                     System_Disable_Send_Get_Down();
                     System.is_power_on_send_changed = 1;
-                    System.Properties_Change = ALL_Change;
+                    System.Properties_Change = All_Properties_Read();
                     System.is_need_check_net = 0;  
                   }
                break;
@@ -1788,7 +1805,7 @@ uint8_t Protcol_Properties_Changed_Check(uint32_t properties ){
     uint8_t SendProperties=0;
 
     //右移5位看下一组
-    if(properties&ALL_Change){
+    if(properties & All_Properties_Read()){
 
       if(properties&0x1F){
           

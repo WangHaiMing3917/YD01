@@ -36,4 +36,6 @@ void Protocol_Cmd_Cache(uint8_t CmdCache);
 void Protocol_Send_Properties_Changed(void);
 void Protocol_Properties_Changed_Scan(void);
 void Protocol_Cmd_Clear(void);
+
+uint32_t All_Properties_Read(void);
 #endif
