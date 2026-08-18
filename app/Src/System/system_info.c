@@ -287,6 +287,7 @@ void SystemInfo_Memory_Init(void){
     SystemInfo_Restore_Check();
 
     SystemInfo_Relays_Count_Check();
-
+    
+    Bsp_Relays_Channel_Init(SystemInfo.ChannelCount);
 }
 

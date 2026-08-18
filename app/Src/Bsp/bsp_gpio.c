@@ -3,18 +3,18 @@
 
 
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Wifi_Io_Init(void)
-//º¯Êý¹¦ÄÜ: wifi Io ³õÊ¼»¯
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷: 
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Wifi_Io_Init(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: wifi Io ï¿½ï¿½Ê¼ï¿½ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½: 
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Wifi_Io_Init(void){
     
     std_gpio_init_t Gpio_Init = {0};
    
-    /*wifiÄ£¿éÊ¹ÄÜ*/
+    /*wifiÄ£ï¿½ï¿½Ê¹ï¿½ï¿½*/
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_NOPULL; 
     Gpio_Init.pin =  BLUETOOTH_DETECTION_PIN;
@@ -22,12 +22,12 @@ void Bsp_Wifi_Io_Init(void){
 
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Mode_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»ØÄ£Ê½°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Mode_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_ChannelMode_Init(void){
 
@@ -37,7 +37,7 @@ void Bsp_ChannelMode_Init(void){
     
     std_gpio_init_t Gpio_Init = {0};
    
-    /*wifiÄ£¿éÊ¹ÄÜ*/
+    /*wifiÄ£ï¿½ï¿½Ê¹ï¿½ï¿½*/
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_PULLUP; 
     Gpio_Init.pin =  MODE_PIN;
@@ -45,12 +45,12 @@ void Bsp_ChannelMode_Init(void){
 
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Mode_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»ØÄ£Ê½°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Mode_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_ChannelMode_DeInit(void){
 
@@ -59,7 +59,7 @@ void Bsp_ChannelMode_DeInit(void){
     
     std_gpio_init_t Gpio_Init = {0};
    
-    /*wifiÄ£¿éÊ¹ÄÜ*/
+    /*wifiÄ£ï¿½ï¿½Ê¹ï¿½ï¿½*/
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_PULLDOWN; 
     Gpio_Init.pin =  MODE_PIN;
@@ -67,12 +67,12 @@ void Bsp_ChannelMode_DeInit(void){
 
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: Bsp_ChannelMode_Detect
-//º¯Êý¹¦ÄÜ: Í¨µÀÄ£Ê½¼à²â
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Bsp_ChannelMode_Detect
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Í¨ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_ChannelMode_Detect(void){
 
@@ -80,17 +80,17 @@ uint8_t Bsp_ChannelMode_Detect(void){
 }
 
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Gpio_Init(void)
-//º¯Êý¹¦ÄÜ: io³õÊ¼»¯
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷: 
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Gpio_Init(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ioï¿½ï¿½Ê¼ï¿½ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½: 
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Gpio_Init(void){
 
      std_gpio_init_t Gpio_Init = {0};
-    /* Ê¹ÄÜIO•rçŠ*/
+    /* Ê¹ï¿½ï¿½IOï¿½rï¿½*/
     std_rcc_gpio_clk_enable(RCC_PERIPH_CLK_GPIOB|RCC_PERIPH_CLK_GPIOA|
                             RCC_PERIPH_CLK_GPIOC|RCC_PERIPH_CLK_GPIOD|RCC_PERIPH_CLK_GPIOF);
 
@@ -100,19 +100,21 @@ void Bsp_Gpio_Init(void){
     Gpio_Init.output_type =  GPIO_OUTPUT_PUSHPULL;
     Gpio_Init.pin =  GPIO_PIN_6|GPIO_PIN_7;
     std_gpio_init(GPIOA, &Gpio_Init);
-   
+        
     Gpio_Init.pin =  GPIO_PIN_10;
     std_gpio_init(GPIOB, &Gpio_Init);
     Gpio_Init.pin =  GPIO_PIN_7|GPIO_PIN_12|GPIO_PIN_13;
     std_gpio_init(GPIOC, &Gpio_Init);
     Gpio_Init.pin =  GPIO_PIN_2;
     std_gpio_init(GPIOD, &Gpio_Init);
+     
+     
     std_gpio_reset_pin(GPIOD,GPIO_PIN_2); 
     std_gpio_reset_pin(GPIOC,GPIO_PIN_7|GPIO_PIN_12|GPIO_PIN_13); 
     std_gpio_reset_pin(GPIOB,GPIO_PIN_10); 
     std_gpio_reset_pin(GPIOA,GPIO_PIN_6|GPIO_PIN_7); 
 
-     //µôµç¼à²âIO³õÊ¼»¯ 
+     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IOï¿½ï¿½Ê¼ï¿½ï¿½ 
     Gpio_Init.mode = GPIO_MODE_INPUT;
     Gpio_Init.pull = GPIO_NOPULL; 
     Gpio_Init.pin =  POWER_DOWN_PIN;
@@ -134,54 +136,55 @@ void Bsp_Gpio_Init(void){
     Gpio_Init.pin =  KEY_HOURS_PIN;
     std_gpio_init(KEY_HOURS_PORT, &Gpio_Init); 
      
-    //À¶ÑÀÊ¹ÄÜ³õÊ¼»¯ 
+    //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ü³ï¿½Ê¼ï¿½ï¿½ 
     Bsp_Wifi_Io_Init();
-    //±³¹âµÆ³õÊ¼»¯ 
+    //ï¿½ï¿½ï¿½ï¿½Æ³ï¿½Ê¼ï¿½ï¿½ 
     Bsp_Back_Light_Close();
-    //¼ÌµçÆ÷³õÊ¼»¯
-    Bsp_Relays_Channel_Init(SystemInfo.ChannelCount);
+    //ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
+
+
      
 }
 
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Back_Light_Open(void)
-//º¯Êý¹¦ÄÜ:  ±³¹â´ò¿ª
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Back_Light_Open(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:  ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Back_Light_Open(void){
     
     #ifndef  _NOT_CONFIG_SWD
     std_gpio_init_t Gpio_Init_STRUCT = {0};
    
-   //ÅäÖÃ¿ªÂ©Êä³ö
+   //ï¿½ï¿½ï¿½Ã¿ï¿½Â©ï¿½ï¿½ï¿½
     Gpio_Init_STRUCT.mode = GPIO_MODE_INPUT;
     Gpio_Init_STRUCT.pull = GPIO_NOPULL;
-    //±³¹â
+    //ï¿½ï¿½ï¿½ï¿½
     Gpio_Init_STRUCT.pin =  BACK_LIGHT_PIN;
     std_gpio_init(BACK_LIGHT_PORT, &Gpio_Init_STRUCT); 
    #endif
 }
 
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Back_Light_Close(void)
-//º¯Êý¹¦ÄÜ:  ±³¹â´ò¹Ø±Õ
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷: 
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Back_Light_Close(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:  ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½: 
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Back_Light_Close(void){
     
    #ifndef  _NOT_CONFIG_SWD
     std_gpio_init_t Gpio_Init_STRUCT = {0};
    
-   //ÅäÖÃ¿ªÂ©Êä³ö
+   //ï¿½ï¿½ï¿½Ã¿ï¿½Â©ï¿½ï¿½ï¿½
     Gpio_Init_STRUCT.mode = GPIO_MODE_OUTPUT;
     Gpio_Init_STRUCT.pull = GPIO_PULLDOWN;
-    //±³¹â
+    //ï¿½ï¿½ï¿½ï¿½
     Gpio_Init_STRUCT.pin =  BACK_LIGHT_PIN;
     std_gpio_init(BACK_LIGHT_PORT, &Gpio_Init_STRUCT);  
 
@@ -190,18 +193,18 @@ void Bsp_Back_Light_Close(void){
 }
 
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Relays_Channel_Init(uint8_t Channel_Count)
-//º¯Êý¹¦ÄÜ: 
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Relays_Channel_Init(uint8_t Channel_Count)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Relays_Channel_Init(uint8_t Channel_Count){
 
     std_gpio_init_t Relay_Gpio_Init = {0};
 
-    //ÅäÖÃ³É¿ªÂ©Êä³ö
+    //ï¿½ï¿½ï¿½Ã³É¿ï¿½Â©ï¿½ï¿½ï¿½
     Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
     Relay_Gpio_Init.pull = GPIO_NOPULL;
     Relay_Gpio_Init.output_type = GPIO_OUTPUT_PUSHPULL;
@@ -231,20 +234,31 @@ void Bsp_Relays_Channel_Init(uint8_t Channel_Count){
            Bsp_Relays_Close(RELAYS_CHANNEL_1_PORT,RELAYS_CHANNEL_1_PIN);
         break;
     }
-
+    if(SystemInfo.ChannelCount==3){
+    
+      Relay_Gpio_Init.pin =  RELAYS_CHANNEL_5_PIN;
+      std_gpio_init(RELAYS_CHANNEL_5_PORT, &Relay_Gpio_Init);
+        
+      Relay_Gpio_Init.pin =  RELAYS_CHANNEL_4_PIN;
+      std_gpio_init(RELAYS_CHANNEL_4_PORT, &Relay_Gpio_Init);
+        
+      std_gpio_reset_pin(RELAYS_CHANNEL_4_PORT,RELAYS_CHANNEL_4_PIN); 
+      std_gpio_reset_pin(RELAYS_CHANNEL_5_PORT,RELAYS_CHANNEL_5_PIN); 
+    }
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask)
-//º¯Êý¹¦ÄÜ: 
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask){
 
     std_gpio_init_t Relay_Gpio_Init = {0};
-    //ÅäÖÃ³É¿ªÂ©Êä³ö
+    //ï¿½ï¿½ï¿½Ã³É¿ï¿½Â©ï¿½ï¿½ï¿½
+    Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
     Relay_Gpio_Init.pull = GPIO_NOPULL;
     Relay_Gpio_Init.output_type=  GPIO_OUTPUT_PUSHPULL;
     Relay_Gpio_Init.pin =  pin_mask; 
@@ -253,17 +267,17 @@ void Bsp_Relays_Open(GPIO_t* gpiox, uint32_t pin_mask){
 
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask)
-//º¯Êý¹¦ÄÜ: 
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask){
 
     std_gpio_init_t Relay_Gpio_Init = {0};
-    //ÅäÖÃ³É¿ªÂ©Êä³ö
+    //ï¿½ï¿½ï¿½Ã³É¿ï¿½Â©ï¿½ï¿½ï¿½
     Relay_Gpio_Init.mode = GPIO_MODE_OUTPUT;
     Relay_Gpio_Init.pull = GPIO_NOPULL;
     Relay_Gpio_Init.output_type=  GPIO_OUTPUT_PUSHPULL;
@@ -273,12 +287,12 @@ void Bsp_Relays_Close(GPIO_t* gpiox, uint32_t pin_mask){
 
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: Bsp_Power_Down_Exit_Init
-//º¯Êý¹¦ÄÜ: µôµçÖÐ¶ÏÅäÖÃ
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷: 
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Bsp_Power_Down_Exit_Init
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½: 
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Power_Down_Exit_Init(void){
 
@@ -292,16 +306,16 @@ void Bsp_Power_Down_Exit_Init(void){
     std_exti_init(&Key_Exti_init_config);  
     
     NVIC_SetPriority(EXTI0_1_IRQn, NVIC_PRIO_2); 
-    /* Ê¹ÄÜÖÐ¶Ï */
+    /* Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½ */
     NVIC_EnableIRQ(EXTI0_1_IRQn);
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: Bsp_Power_Down_Exit_Deint
-//º¯Êý¹¦ÄÜ: 
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷: 
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Bsp_Power_Down_Exit_Deint
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½: 
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Power_Down_Exit_Deint(void){
 
@@ -314,24 +328,24 @@ void Bsp_Power_Down_Exit_Deint(void){
     
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: Bsp_Power_Down_Scan
-//º¯Êý¹¦ÄÜ: µÍÑ¹¼ì²â
-//²Î    Êý:
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Bsp_Power_Down_Scan
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½
+//ï¿½ï¿½    ï¿½ï¿½:
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_Power_Down_Scan(void){
 
     return std_gpio_get_input_pin(POWER_DOWN_PORT,POWER_DOWN_PIN);
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Hour_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»ØÐ¡Ê±°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Hour_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ð¡Ê±ï¿½ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_Hour_Key_Read(void){
 
@@ -340,12 +354,12 @@ uint8_t Bsp_Hour_Key_Read(void){
     
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Minutes_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»Ø·ÖÖÓ°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Minutes_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½Ø·ï¿½ï¿½Ó°ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_Minutes_Key_Read(void){
 
@@ -354,12 +368,12 @@ uint8_t Bsp_Minutes_Key_Read(void){
     
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Weeks_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»ØÐÇÆÚ°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Weeks_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_Weeks_Key_Read(void){
 
@@ -368,12 +382,12 @@ uint8_t Bsp_Weeks_Key_Read(void){
     
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Timing_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»Ø¶¨Ê±°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Timing_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½Ø¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_Timing_Key_Read(void){
 
@@ -382,12 +396,12 @@ uint8_t Bsp_Timing_Key_Read(void){
     
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Mode_Key_Read(void)
-//º¯Êý¹¦ÄÜ: ·µ»ØÄ£Ê½°´¼ü×´Ì¬
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Mode_Key_Read(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 uint8_t Bsp_Mode_Key_Read(void){
 
@@ -397,12 +411,12 @@ uint8_t Bsp_Mode_Key_Read(void){
 }
 
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Key_Exit_Enable(void)
-//º¯Êý¹¦ÄÜ: Íâ²¿ÖÐ¶Ï
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Key_Exit_Enable(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½â²¿ï¿½Ð¶ï¿½
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Key_Exit_Enable(void){
 
@@ -434,26 +448,26 @@ void Bsp_Key_Exit_Enable(void){
     Key_Exti_init_config.gpio_id = KEY_HOURS_EXTI_PORT;
     
     std_exti_init(&Key_Exti_init_config); 
-    /* ÅäÖÃÖÐ¶ÏÓÅÏÈ¼¶ */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½È¼ï¿½ */
     NVIC_SetPriority(EXTI4_15_IRQn, NVIC_PRIO_3); 
-    /* Ê¹ÄÜÖÐ¶Ï */
+    /* Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½ */
     NVIC_EnableIRQ(EXTI4_15_IRQn);
     
     NVIC_SetPriority(EXTI0_1_IRQn, NVIC_PRIO_3); 
-    /* Ê¹ÄÜÖÐ¶Ï */
+    /* Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½ */
     NVIC_EnableIRQ(EXTI0_1_IRQn);
     
     NVIC_SetPriority(EXTI2_3_IRQn, NVIC_PRIO_3); 
-    /* Ê¹ÄÜÖÐ¶Ï */
+    /* Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½ */
     NVIC_EnableIRQ(EXTI2_3_IRQn);
 }
 //****************************************************************//
-//º¯ÊýÃû³Æ: uint8_t Bsp_Key_Exit_Disable(void)
-//º¯Êý¹¦ÄÜ: Íâ²¿ÖÐ¶Ï
-//²Î    Êý: 
-//·µ »Ø Öµ:
-//Ëµ    Ã÷:  
-//ÐÞ¸Ä¼ÇÂ¼: 2024.9.26 Whm´´½¨º¯Êý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: uint8_t Bsp_Key_Exit_Disable(void)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½â²¿ï¿½Ð¶ï¿½
+//ï¿½ï¿½    ï¿½ï¿½: 
+//ï¿½ï¿½ ï¿½ï¿½ Öµ:
+//Ëµ    ï¿½ï¿½:  
+//ï¿½Þ¸Ä¼ï¿½Â¼: 2024.9.26 Whmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //***************************************************************//
 void Bsp_Key_Exit_Disable(void){
 
