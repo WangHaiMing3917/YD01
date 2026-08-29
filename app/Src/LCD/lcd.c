@@ -648,12 +648,22 @@ void Lcd_Disp_Channel(uint8_t channel){
    
     if(Display.channel_fast_flash_enable){
         
-        if(!Display.channel_fast_flash_flag)
-             Lcd_Number_Disp(channel,Timing_Decade);
-
+        if(!Display.channel_fast_flash_flag){
+           Lcd_Number_Disp(channel,Timing_Decade);
+            
+           if(Current.Mode ==AUTO_STATE){
+               
+             if( !SystemInfo.time_channel[Current.channel-1].Relays_States)
+              Bsp_Disp_TimingClose();
+            else
+              Bsp_Disp_TimingOpen();      
+               
+            } 
+        }
     }else{
     
         Lcd_Number_Disp(channel,Timing_Decade);
+
     }
 
 }
@@ -935,6 +945,7 @@ void Lcd_Fast_Disp_Channel_Into(uint8_t times,uint16_t delays){
       Display.channel_fast_flash_enable=1;
       Display.fast_disp_channel_times=times;
       Lcd_Fast_Disp_Channel_Delays_Set(delays);
+
 
 }
 
