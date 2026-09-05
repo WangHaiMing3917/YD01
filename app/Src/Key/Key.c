@@ -49,24 +49,13 @@ void EXTI2_3_IRQHandler(void)
           Sleep.wakeup_type= wake_up_by_timing_key;
     }
 }
-//****************************************************************//
-//函数名称: EXTI0_1_IRQHandler
-//函数功能: 
-//参    数:
-//返 回 值:
-//说    明: 
-//修改记录: 2024.9.26 Whm创建函数
-//***************************************************************//
-void EXTI0_1_IRQHandler(void)
-{
-    /* 读取EXTI通道中断挂起状态 */
-    if (std_exti_get_pending_status(KEY_WEEKS_EXTI_LINE))
-    {
-        /* 清除EXTI通道中断挂起状态 */
-        std_exti_clear_pending(KEY_WEEKS_EXTI_LINE);
-        if(!System.power_down_exit_is_config)
-          Sleep.wakeup_type= wake_up_by_week_key;
-        else{
+
+void Key_Power_Down_Double_Check(void){
+    
+    
+    if(System.double_check_power_down&&!System.double_check_delays){
+    
+        if(System.power_down_cnt>25){
             
           System.count_power_on=0;
             
@@ -93,13 +82,43 @@ void EXTI0_1_IRQHandler(void)
           
           System_Disable_Send_Get_Down(); 
           
-          if(System.power_on_init){
+          if(System.power_on_init)
               
             SystemInfo.is_request_save=1u;
-             //将数据写入Flash的第一行
-           // SystemInfo_Save(); 
-          }  
-           // Into_Sleep_Mode(); 
+        
+        }
+        System.double_check_power_down = 0;
+                
+    }
+
+    
+    
+}
+
+//****************************************************************//
+//函数名称: EXTI0_1_IRQHandler
+//函数功能: 
+//参    数:
+//返 回 值:
+//说    明: 
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
+void EXTI0_1_IRQHandler(void)
+{
+    /* 读取EXTI通道中断挂起状态 */
+    if (std_exti_get_pending_status(KEY_WEEKS_EXTI_LINE))
+    {
+        /* 清除EXTI通道中断挂起状态 */
+        std_exti_clear_pending(KEY_WEEKS_EXTI_LINE);
+        if(!System.power_down_exit_is_config)
+          Sleep.wakeup_type= wake_up_by_week_key;
+        else{
+           
+          System.double_check_power_down =1;
+          System.double_check_delays=30;
+          System. power_down_cnt = 0; 
+
+          
         }
        
     }

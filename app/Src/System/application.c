@@ -28,6 +28,8 @@ int main(void){
  
     Time_1ms_poll();
        
+    Key_Power_Down_Double_Check();
+       
     Sleep_Process();
    
    }

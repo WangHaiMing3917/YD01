@@ -40,6 +40,10 @@ void TIM8_IRQHandler(void)
         System_Factory_Disp_Timer();  
         System_1ms_Timer();
         Protocol_1ms_Timer();
+        if(System.double_check_power_down)    {
+            if(!Bsp_Power_Down_Scan())
+              System.power_down_cnt++;
+        }
     }
 }
 //****************************************************************//

@@ -77,6 +77,6 @@ void Key_Out_Sleep_Config(void);
 void Key_Process(void);
 
 uint8_t  Key_is_Locked(void);
-
+void Key_Power_Down_Double_Check(void);
 
 #endif
