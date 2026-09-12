@@ -49,7 +49,14 @@ void EXTI2_3_IRQHandler(void)
           Sleep.wakeup_type= wake_up_by_timing_key;
     }
 }
-
+//****************************************************************//
+//函数名称: void Key_Power_Down_Double_Check(void)
+//函数功能: 
+//参    数:
+//返 回 值:
+//说    明: 
+//修改记录: 2024.9.26 Whm创建函数
+//***************************************************************//
 void Key_Power_Down_Double_Check(void){
     
     
@@ -1034,11 +1041,10 @@ void Is_Key_Press(void){
    std_gpio_init_t Key_Gpio_Init = {0};
    uint8_t cache,is_enable_lptime=0;
    cache=  Key_State_Read();
+       Key_Gpio_Init.mode = GPIO_MODE_INPUT;
+    Key_Gpio_Init.pull = GPIO_PULLDOWN;
    if(cache&KEY_MINUTES){
 
-    Key_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Key_Gpio_Init.pull = GPIO_PULLDOWN;
-    
     Key_Gpio_Init.pin =  KEY_MINUTE_PIN;
     std_gpio_init(KEY_MINUTE_PORT, &Key_Gpio_Init);
      Key.Key_Config_PuDown=KEY_MINUTES;
@@ -1046,27 +1052,20 @@ void Is_Key_Press(void){
    }
    if(cache&KEY_TIMING){
        
-    Key_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Key_Gpio_Init.pull = GPIO_PULLDOWN;
-    
     Key_Gpio_Init.pin =  KEY_TIMING_PIN;
     std_gpio_init(KEY_TIMING_PORT, &Key_Gpio_Init);
      is_enable_lptime++;
     Key.Key_Config_PuDown|=KEY_TIMING;  
    }
    if(cache&KEY_WEEKS) {
-    Key_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Key_Gpio_Init.pull = GPIO_PULLDOWN;
-    
+
     Key_Gpio_Init.pin =  KEY_WEEKS_PIN;
     std_gpio_init(KEY_WEEKS_PORT, &Key_Gpio_Init);
     is_enable_lptime++;
     Key.Key_Config_PuDown|=KEY_WEEKS;  
    }
    if(cache&KEY_MODE){
-    Key_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Key_Gpio_Init.pull = GPIO_PULLDOWN;
-    
+
     Key_Gpio_Init.pin =  KEY_MODE_PIN;
     std_gpio_init(KEY_MODE_PORT, &Key_Gpio_Init);
     is_enable_lptime++;
@@ -1074,9 +1073,7 @@ void Is_Key_Press(void){
    }
    if(cache&KEY_HOURS){
        
-    Key_Gpio_Init.mode = GPIO_MODE_INPUT;
-    Key_Gpio_Init.pull = GPIO_PULLDOWN;
-    
+
     Key_Gpio_Init.pin =  KEY_HOURS_PIN;
     std_gpio_init(KEY_HOURS_PORT, &Key_Gpio_Init);
     is_enable_lptime++;

@@ -17,9 +17,9 @@
 //对应app_软件版本
 #define DEVICE_VERSION             1u
 
-#define MCU_VERSION                19u
+#define MCU_VERSION                20u
 //编译时间
-#define AP_DATE                    {'2','0','2','6','0','8','2','9'}
+#define AP_DATE                    {'2','0','2','6','0','9','1','2'}
 
 
 //LCD_SEG脚配置

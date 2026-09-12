@@ -385,8 +385,7 @@ void System_PowerState_Change_HardwareProcess(void){
          System.wifi_hardware_is_init=0;  
          //失能掉电中断检测 
          System_PowerDown_Exit_Deint(); 
-         //打开按键中断
-         Bsp_Key_Exit_Enable();
+
           
          LpTime1_Enable();
          //关闭wifi显示
@@ -401,7 +400,9 @@ void System_PowerState_Change_HardwareProcess(void){
          System_Disable_Send_Get_Down(); 
           
          Into_Sleep_Mode(); 
-      }
+      } 
+               //打开按键中断
+         Bsp_Key_Exit_Enable();
     }
 
 }

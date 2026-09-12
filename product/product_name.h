@@ -3,8 +3,8 @@
 
 #include "YD01.h"
 
-//#define _NOT_CONFIG_SWD
+#define _NOT_CONFIG_SWD
 
-//#define _DUBUG__
+#define _DUBUG__
 
 #endif

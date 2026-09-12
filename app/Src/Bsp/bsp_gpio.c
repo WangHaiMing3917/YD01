@@ -449,15 +449,15 @@ void Bsp_Key_Exit_Enable(void){
     
     std_exti_init(&Key_Exti_init_config); 
     /* �����ж����ȼ� */
-    NVIC_SetPriority(EXTI4_15_IRQn, NVIC_PRIO_3); 
+    NVIC_SetPriority(EXTI4_15_IRQn, NVIC_PRIO_0); 
     /* ʹ���ж� */
     NVIC_EnableIRQ(EXTI4_15_IRQn);
     
-    NVIC_SetPriority(EXTI0_1_IRQn, NVIC_PRIO_3); 
+    NVIC_SetPriority(EXTI0_1_IRQn, NVIC_PRIO_0); 
     /* ʹ���ж� */
     NVIC_EnableIRQ(EXTI0_1_IRQn);
     
-    NVIC_SetPriority(EXTI2_3_IRQn, NVIC_PRIO_3); 
+    NVIC_SetPriority(EXTI2_3_IRQn, NVIC_PRIO_0); 
     /* ʹ���ж� */
     NVIC_EnableIRQ(EXTI2_3_IRQn);
 }
