@@ -1,5 +1,5 @@
 #include "bsp.h"
-
+ std_lcd_init_t lcd_config = {0};
 //****************************************************************//
 //         SEG0  SEG1   SEG2  SEG3   SEG4  SEG5  SEG6  SEG7   SEG8   SEG9
 //COM0     1E    1D           2E     2D    S11   3E    3D     4E     4D
@@ -161,8 +161,7 @@ void Bsp_Lcd_Gpio_Config(void){
 //***************************************************************//
 void Bsp_Lcd_Init(void){
 
-    std_lcd_init_t lcd_config = {0};
-    
+
     Bsp_Lcd_Gpio_Config();
 
     std_rcc_apb1_clk_enable(RCC_PERIPH_CLK_LCD); 
@@ -183,7 +182,7 @@ void Bsp_Lcd_Init(void){
     lcd_config.mux_segment = LCD_MUX_SEGMENT_ENABLE;        /* 1/6 和 1/4duty需使能区段多路复用，1/8duty为无关项 */
     lcd_config.bias = LCD_BIAS_1_3;
     lcd_config.duty = LCD_DUTY_1_4;
-    lcd_config.driver_mode = LCD_DRIVER_MODE_CHARGE_PUMP;
+    lcd_config.driver_mode = LCD_CR_MDSET_INNER_RES;
     lcd_config.prescaler = LCD_PRESCALER_4;                 /* 帧速率配置为32Hz */
     lcd_config.divider = LCD_DIVIDER_31;
     lcd_config.vlcd_voltage = LCD_CHAGE_PUMP_1_3_BIAS_3_30V;/* VLCD电压3.3V */
@@ -199,6 +198,26 @@ void Bsp_Lcd_Init(void){
     std_lcd_set_scoc(LCD_SCOC_OUT);
 }
 
+void Bsp_Lcd_Power_Change(uint8_t type){
+
+/* LCD参数配置 */
+    lcd_config.mux_segment = LCD_MUX_SEGMENT_ENABLE;        /* 1/6 和 1/4duty需使能区段多路复用，1/8duty为无关项 */
+    lcd_config.bias = LCD_BIAS_1_3;
+    lcd_config.duty = LCD_DUTY_1_4;
+    if(type)
+     lcd_config.driver_mode = LCD_DRIVER_MODE_CHARGE_PUMP;
+    else
+     lcd_config.driver_mode = LCD_CR_MDSET_INNER_RES;   
+    lcd_config.prescaler = LCD_PRESCALER_4;                 /* 帧速率配置为32Hz */
+    lcd_config.divider = LCD_DIVIDER_31;
+    lcd_config.vlcd_voltage = LCD_CHAGE_PUMP_1_3_BIAS_3_30V;/* VLCD电压3.3V */
+    
+     if(type)
+         std_delayms(LCD_DRIVER_VOLTAGE_DELAY);
+    /* LCD 初始化 */
+    std_lcd_init(&lcd_config);
+
+}
 //****************************************************************//
 //函数名称: void Bsp_Disp_A(uint8_t pos)
 //函数功能: 显示A

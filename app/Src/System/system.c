@@ -769,7 +769,7 @@ void Power_Down_Process(void){
    }
    
    System.is_power_down=1;
-   
+   Bsp_Lcd_Power_Change(System.is_power_down);
    System_Back_Led_Close();
 
 }
@@ -785,7 +785,7 @@ void Power_Down_Restore(void){
 
    //掉电情况下,继电器是打开的,则关闭，但是不改变标志位
   System.is_power_down=0;
-    
+  Bsp_Lcd_Power_Change(System.is_power_down);  
   for(uint8_t i=0;i<SystemInfo.ChannelCount;i++){
   
       if(SystemInfo.time_channel[i].Relays_States)

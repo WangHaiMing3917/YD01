@@ -6,7 +6,7 @@
 
 void Bsp_Lcd_Gpio_Config(void);
 void Bsp_Lcd_Init(void);
-
+void Bsp_Lcd_Power_Change(uint8_t type);
 
 enum{
 
